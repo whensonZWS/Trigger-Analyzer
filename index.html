@@ -1,0 +1,74 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+    <style type="text/css">
+        #mynetwork {
+            position: absolute;
+            top: 5%;
+            width: 68%;
+            height: 92%;
+            border: 1px solid lightgray;
+        }
+        #info {
+            position: absolute;
+            top: 5%;
+            left: 69%;
+            width: 30%;
+            height: 45%;
+            border: 1px solid lightgrey;
+            overflow: auto;
+            font-family:Consolas, monospace;
+        }
+        #nodesList {
+            position: absolute;
+            top: 52%;
+            left: 69%;
+            width: 30%;
+            height: 45%;
+            border: 1px solid lightgrey;
+            overflow: auto;
+            font-family:Consolas, monospace;
+        }
+        
+        #searchBox {
+            position: absolute;
+            top: 47%;
+            left: 69%;
+            width: 30%;
+            height: 5%;
+            border: 1px solid lightgrey;
+            font-family:Consolas, monospace;
+        }
+
+        .listItem {
+            padding: 5px 0px 5px 0px;
+            font-family:Consolas, monospace;
+            user-select: none;
+        }
+        .listItem:hover{
+            background-color: lightgrey;
+        }
+
+
+        .green {
+            color: rgb(0, 212, 0);
+        }
+        .red {
+            color: red;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<input type="file" id="fileInput" accept=".map">
+<div id="info">this is some info</div>
+<div id="nodesList">list of nodes</div>
+<input type="text" id="searchBox" placeholder="Search By Trigger Name or ID" onkeyup="filterFunc()">
+<div id="mynetwork"></div>
+
+<script src='main.js'>
+    
+</script>
+</body>
+</html>

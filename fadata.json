@@ -1,0 +1,2757 @@
+{
+    "events": [
+        {
+            "name": "-No Event-",
+            "description": "This is a null event. There is no need to ever use this in a real trigger.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Entered by...",
+            "description": "Triggers when an infantry or vehicle enters the attached object. Typically this trigger is attached to a building or a cell.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Spied upon",
+            "description": "Detects when a spy has entered the attached building.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Thieved by...",
+            "description": "Triggers when a thief steals money from the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Discovered by Player",
+            "description": "Detects when the attached object has been discovered by the Player. Discovered means reavealed from under the shroud.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "House discovered...",
+            "description": "Triggers when the specified House has any of its units or buildings discovered by the Player.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Attacked by any House",
+            "description": "Triggers when the attached unit is attacked in some manner. Incidental damage or friendly fire does not count.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed by any House",
+            "description": "Triggers when the attached object has been destroyed. Destroyed by incidental damage or friendly fire doesn't count.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Any Event",
+            "description": "When used alone%1 it will force the trigger to spring immediately.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 Units%1 All...",
+            "description": "Triggers when all units of the specified House have been destroyed. Typically used for end of game conditions.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 Buildings%1 All...",
+            "description": "Triggers when all buildings of the specified House have been destroyed. Typically used for end of game conditions.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 All...",
+            "description": "Triggers when all objects owned by the specified House have been destroyed. This is the normal (destroy everyone) trigger condition for end of game.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Credits exceed...",
+            "description": "Triggers when the credit total of the trigger's owning House exceeds this specified amount.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Elapsed Time...",
+            "description": "Triggers when the elapsed time has expired. This time is initialized when the trigger is created. Timer is reset whenever trigger is sprung when trigger is 'persistant'.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Global Mission Timer expired",
+            "description": "Triggers when the Global Mission Timer as displayed on the screen has reached zero.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 Buildings%1 #...",
+            "description": "Triggers when the number of buildings%1 owned by the trigger's owning House%1 have been destroyed.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 Units%1 #...",
+            "description": "Triggers when the number of units%1 owned by the trigger's owning House%1 have been destroyed.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "No Factories left",
+            "description": "Triggers when there are no factories left for the trigger's owning House.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Civilians evacuated",
+            "description": "Triggers when civilians have been evacuated/left the map.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Build Building Type...",
+            "description": "When the trigger's owning House builds the building type specified%1 then this event will spring.",
+            "p": [
+                0,
+                8,
+                0
+            ]
+        },
+        {
+            "name": "Build Unit Type...",
+            "description": "When the trigger's owning House builds the unit type specified%1 then this event will spring.",
+            "p": [
+                0,
+                11,
+                0
+            ]
+        },
+        {
+            "name": "Build Infantry Type...",
+            "description": "When the trigger's owning House builds the infantry type specified%1 then this event will spring.",
+            "p": [
+                0,
+                10,
+                0
+            ]
+        },
+        {
+            "name": "Build Aircraft Type...",
+            "description": "When the trigger's owning House builds the aircraft type specified%1 then this event will spring.",
+            "p": [
+                0,
+                9,
+                0
+            ]
+        },
+        {
+            "name": "Team leaves map...",
+            "description": "Triggers when the specified team leaves the map. If the team is destroyed%1 it won't trigger. If all but one member is destroyed and that last member leaves the map%1 it will spring.",
+            "p": [
+                -1,
+                7,
+                0
+            ]
+        },
+        {
+            "name": "Zone Entry by...",
+            "description": "Triggers when a unit of the specified House enters the same zone that this trigger is located in. This trigger must be located in a cell and only a cell.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Crosses Horizontal Line...",
+            "description": "Triggers when a unit of the specified House crosses the horizontal line as indicated by the location of this trigger. This trigger must be placed in a cell.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Crosses Vertical Line...",
+            "description": "Triggers when a unit of the specified House crosses the vertical line as indicated by the location of this trigger. This trigger must be placed in a cell.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Global is set...",
+            "description": "Triggers when the specifed global%1 as defined in Globals.ini%1 is turned on.",
+            "p": [
+                0,
+                35,
+                0
+            ]
+        },
+        {
+            "name": "Global is clear...",
+            "description": "Triggers when the specified global%1 as defined in Globals.ini%1 is turned off.",
+            "p": [
+                0,
+                35,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed by anything (doesn't infiltrate)",
+            "description": "Triggers when attached object is destroyed%1 but not if it removed because it infiltrates a building/unit.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Low Power for House...",
+            "description": "Triggers when the specified House's power falls below 100% level.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Bridge destroyed",
+            "description": "Triggers when the attached bridge is destroyed. A bridge is considered destroyed when an impassable gap is created in the bridge. Place this trigger in a cell under the bridge.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Building exists...",
+            "description": "Triggers when the specified building%1 owned by the trigger's owning House%1 exists on the map. This works for buildings that are preexisting or constructed by deploying.",
+            "p": [
+                0,
+                8,
+                0
+            ]
+        },
+        {
+            "name": "Selected by Player",
+            "description": "Triggers when the attached unit is selected by the Player. Use in single-player only.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Comes near Waypoint...",
+            "description": "Triggers when the object comes near the specified Waypoint.",
+            "p": [
+                0,
+                30,
+                0
+            ]
+        },
+        {
+            "name": "Enemy in Spotlight",
+            "description": "Triggers when an enemy unit enters the spotlight cast by the attached building.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Local is set...",
+            "description": "Triggers when the specifed local is turned on.",
+            "p": [
+                0,
+                3,
+                0
+            ]
+        },
+        {
+            "name": "Local is clear...",
+            "description": "Triggers when the specified local is turned off.",
+            "p": [
+                0,
+                3,
+                0
+            ]
+        },
+        {
+            "name": "First damaged (combat only)",
+            "description": "Triggers when first suffering from combat damage from combat damage only.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Half health (combat only)",
+            "description": "Triggers when damaged to half health >from combat damage only.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Quarter health (combat only)",
+            "description": "Triggers when damaged to quarter health from combat damage only.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "First damaged (any source)",
+            "description": "Triggers when first suffering from combat damage from any source.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Half health (any source)",
+            "description": "Triggers when damaged to half health >from any source.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Quarter health (any source)",
+            "description": "Triggers when damaged to quarter health from any source.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Attacked by House...",
+            "description": "Triggers when attached object is attacked by some unit of the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Ambient light <=...",
+            "description": "Triggers when the ambient light drops below a certain level. Use numbers between 0 and 100.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Ambient light >=...",
+            "description": "Triggers when the ambient light rises above a certain level. Use numbers between 0 and 100.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Elapsed Scenario Time...",
+            "description": "When time has elapsed since start of scenario.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed by anything",
+            "description": "Triggers when destroyed by anything what-so-ever.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Goodie Crate picked",
+            "description": "When Crate is picked up by the object the trigger is attached to.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Goodie Crate picked by anyone",
+            "description": "When Crate is picked up by any unit.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Random delay...",
+            "description": "Delays a random time between 50 and 150 percent of time specified.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Credits below...",
+            "description": "Triggers when the trigger's owning House's credit total is below this specified amount.",
+            "p": [
+                0,
+                6,
+                0
+            ]
+        },
+        {
+            "name": "Spy entering as House...",
+            "description": "Triggers if a spy disguised as House specified enters the attached object.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Spy entering as Infantry...",
+            "description": "Triggers if a spy disguised as this type of infantry enters the attached object.",
+            "p": [
+                0,
+                10,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed all Naval Units of House...",
+            "description": "Triggers when all naval units of the specified House have been destroyed. Typically used for end of game conditions.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed all Land Units of House...",
+            "description": "Triggers when all land units of the specified House have been destroyed. Typically used for end of game conditions.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Building does not exist...",
+            "description": "Triggers when the specified building%1 owned by the House of this trigger%1  does not exist on the map.",
+            "p": [
+                0,
+                8,
+                0
+            ]
+        },
+        {
+            "name": "Full Power for House...",
+            "description": "Triggers if the specified House's power is at 100% level.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Entered or overflown by...",
+            "description": "Triggers when the specified House's unit%1 infantry%1 or aircraft move over this cell.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "TechType exists%1 #...",
+            "description": "True if there are at least this many of this type%1 belonging to anyone.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "TechType does not exist...",
+            "description": "True if there are none of these on the map at all. Number doesn't mean anything.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "Under EMP",
+            "description": "Triggers when the attached object is disabled by EMP.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Under EMP by House...",
+            "description": "Triggers when the attached object is disabled by EMP by the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "EMP removed",
+            "description": "Triggers when the attached object's EMP is removed by a negative duration EMP effect.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "EMP removed by House...",
+            "description": "Triggers when the attached object's EMP is removed by a negative duration EMP effect by the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Enemy in Spotlight currently",
+            "description": "Triggers when an enemy unit is currently in the spotlight cast by the attached building.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Driver killed",
+            "description": "Triggers when the driver of the attached object has been killed.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Driver killed by House...",
+            "description": "Triggers when the driver of the attached object has been killed by the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Vehicle taken",
+            "description": "Triggers when a driver or vehicle thief enters the attached object.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Vehicle taken by House...",
+            "description": "Triggers when a driver or vehicle thief of the specified House enters the attached object.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Abducted",
+            "description": "Triggers when the attached object is abducted by anyone.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Abducted by House...",
+            "description": "Triggers when the attached object is abducted by the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Abducts something",
+            "description": "Triggers when the attached object abducts something.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Abducts something of House...",
+            "description": "Triggers when the attached object abducts something of the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Superweapon activated...",
+            "description": "Triggers when the trigger's owning House fires the specified Superweapon.",
+            "p": [
+                0,
+                20,
+                0
+            ]
+        },
+        {
+            "name": "Superweapon deactivated...",
+            "description": "Triggers when the trigger's owning House deactivates the specified Superweapon.",
+            "p": [
+                0,
+                20,
+                0
+            ]
+        },
+        {
+            "name": "Superweapon activated near Waypoint...",
+            "description": "Triggers when the specified Superweapon is used near the Waypoint.",
+            "p": [
+                49,
+                52,
+                0
+            ]
+        },
+        {
+            "name": "TechType reverse engineered...",
+            "description": "Triggers while the trigger's owning House has access to reverse engineered TechType. Number doesn't mean anything.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "Reverse engineers anything",
+            "description": "Triggers when the attached building successfully reverse engineers any TechType.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reverse engineers TechType...",
+            "description": "Triggers when the attached building successfully reverse engineers specific TechType. Number doesn't mean anything.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "House owns TechType%1 #...",
+            "description": "Triggers while the trigger's owning House has at least this many of the specified TechType.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "House owns TechType%1 less than #...",
+            "description": "Triggers while the trigger's owning House has no more than this many of the specified TechType.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "Attacked or destroyed by anything",
+            "description": "Triggers when the attached object is attacked or destroyed by absolutely anything.",
+            "p": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Attacked or destroyed by House...",
+            "description": "Triggers when the attached object is attacked or destroyed by the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed by House...",
+            "description": "Triggers when the attached object is destroyed by the specified House.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "TechType exists%1 less than #...",
+            "description": "True if there are no more than this many of this type on the map%1 belonging to anyone.",
+            "p": [
+                48,
+                46,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 KeepAlive%1 All...",
+            "description": "Triggers when the specified house has no more objects with KeepAlive=yes. ",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Destroyed%1 KeepAlive Buildings%1 All...",
+            "description": "Triggers when the specified house has no more buildings with KeepAlive=yes.",
+            "p": [
+                0,
+                2,
+                0
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "-No Action-",
+            "description": "This is a null action. It will do nothing and is equivalent to not having an action at all.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Winner is...",
+            "description": "The winner will be forced to be the House specified. The game will end immediately. Typically%1 the Player's House is specified.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Loser is...",
+            "description": "The loser will be force to be the House specified. The game will end immediately. Typically%1 the Player's House is specified.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Production begins...",
+            "description": "The AI of the specified House will begin production of units and structures.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Create Team...",
+            "description": "Creates a team of the trigger's owning house. The team member are NOT automatically created however%1 they are either built or recruited.",
+            "p": [
+                -1,
+                7,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy Team...",
+            "description": "Destroys all instances of the team type specified. The units in those existing teams will remain and be available for recruiting into other teams.",
+            "p": [
+                -1,
+                7,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "All to Hunt...",
+            "description": "Forces all units%1 of the specified House%1 into the 'Hunt' mode. They will seek out and destroy their enemies.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reinforcement Team...",
+            "description": "Create a reinforcement of the specified team. The members of the team WILL be created magically by this action.",
+            "p": [
+                -1,
+                7,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Drop Zone Flare at Waypoint...",
+            "description": "Display a drop zone flair at the Waypoint specified. The map will also be revealed around that location.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Fire Sale...",
+            "description": "Cause all buildings of the specified House to be sold. Typically this is used in the final assault by the AI.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Play movie and pause...",
+            "description": "Displays the specified movie on full screen. The game is paused while this occurs and resumes normally after it completes.",
+            "p": [
+                0,
+                12,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Text Trigger...",
+            "description": "Display the text identified by the string file's entry label.",
+            "p": [
+                -4,
+                13,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy Trigger...",
+            "description": "Destroy all current instances of the trigger type specified. This does not prevent future instances of that trigger from being created.",
+            "p": [
+                -2,
+                14,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Autocreate begins...",
+            "description": "Initiates autocreate for the House specified. This will cause the AI of the specified House to build autocreate teams as it sees fit.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Change House...",
+            "description": "Changes the House of the attached objects to the one specified.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Allow Win",
+            "description": "Removes one 'blockage' from allowing the Player to win. The blockage number is equal the number of triggers created that have this action.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reveal all map",
+            "description": "Reveals the entire map to the Player. Do NOT use in multiplayer%1 it results in desynchronization.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reveal around Waypoint...",
+            "description": "Reveals a region of the map to the Player around the Waypoint specified.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reveal zone of Waypoint...",
+            "description": "Reveals all cells that share the same zone as the waypoing specified. This yields some wierd results. Use with caution.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Play Sound Effect...",
+            "description": "Plays the sound effect specified.",
+            "p": [
+                -7,
+                16,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Play Music Theme...",
+            "description": "Plays the music theme specified.",
+            "p": [
+                -8,
+                17,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Play Speech...",
+            "description": "Plays the speech sound specified.",
+            "p": [
+                -6,
+                18,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Force Trigger...",
+            "description": "Force all triggers of this specified type to spring regardless of what it's event flags may indicate.",
+            "p": [
+                -2,
+                14,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Timer Start",
+            "description": "Start the Global Mission Timer.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Timer Stop",
+            "description": "Stop the Global Mission Timer.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Timer Extend by...",
+            "description": "Extend the Global Mission Timer by the time specified.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Timer Shorten by...",
+            "description": "Short the Global Mission Timer by the time specified. It can never be reduced below 0 time.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Timer Set...",
+            "description": "Set the Global Mission Timer to the value specified.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Global Set...",
+            "description": "Set the global flag. Global flags are named in the file Globals.ini. Global flags can be either 'on/set/true' or 'off/clear/false'.",
+            "p": [
+                0,
+                35,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Global Clear...",
+            "description": "Clear the global flag. Global flags are named in the file Globals.ini. Global flags can either be 'on/set/true' or 'off/clear/false'.",
+            "p": [
+                0,
+                35,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Auto Base Building...",
+            "description": "Initialize the skirmish mode's AI build control to either 'on' or 'off' state. When 'on'%1 the AI takes over as if it were in skirmish mode as long as it has a Construction Yard.",
+            "p": [
+                0,
+                37,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Grow shroud one step",
+            "description": "Increase the shroud darkness by one step.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy attached object",
+            "description": "Destroy any buildings%1 bridges%1 or units that this trigger is attached to.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Add 1-time Superweapon...",
+            "description": "Add the specified one-shot Superweapon to the trigger's owning House.",
+            "p": [
+                0,
+                36,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Add repeating Superweapon...",
+            "description": "Add the specified Superweapon permanently to the trigger's owning House.",
+            "p": [
+                0,
+                36,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Preferred target...",
+            "description": "Specify what the trigger's owning House should use as its preferred target when using Superweapon attacks with the Offensive targeting setting.",
+            "p": [
+                0,
+                40,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "All change House...",
+            "description": "All objects of the trigger's owning House change ownership to the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Make ally...",
+            "description": "Cause the trigger's owning House to ally with the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Make enemy...",
+            "description": "Cause the trigger's owning House to break the alliance with the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Change Zoom Level...",
+            "description": "Changes the zoom out level of the Player's radar map. Use 1 for normal view%1 2 for zoomed out.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Resize Player View...",
+            "description": "Changes the Player's viewing rectangle into the map.  Enter as:   x%1y%1w%1h   where x%1y gives the upper left corner and w%1h give the width and height.",
+            "p": [
+                0,
+                0,
+                21,
+                22,
+                23,
+                24,
+                0
+            ]
+        },
+        {
+            "name": "Play Anim at...",
+            "description": "Plays the specified anim in the specified cell.",
+            "p": [
+                0,
+                25,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Do Explosion with Weapon at...",
+            "description": "Creates an explosion in the specified cell%1 using the warhead from the weapon specified by its index.",
+            "p": [
+                0,
+                41,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Meteor strike at...",
+            "description": "Sends a single meteor at the specified cell.",
+            "p": [
+                0,
+                29,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Start Ion Storm...",
+            "description": "Starts an ion storm sequence to run for the specified number of game frames.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Stop Ion Storm..",
+            "description": "End an Ion storm in progress.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Lock input",
+            "description": "Disables user input.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Unlock input",
+            "description": "Enables user input.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Center Camera at Waypoint...",
+            "description": "Moves the tactical view to the specified Waypoint.",
+            "p": [
+                0,
+                28,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Zoom in",
+            "description": "Zooms the tactical map in.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Zoom out",
+            "description": "Zooms the tactical map out.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reshroud Map",
+            "description": "Reshrouds the entire map.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Change Light Behavior",
+            "description": "Changes the way a building spotlight behaves. Attach this trigger to a building that casts a spotlight.",
+            "p": [
+                0,
+                42,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Enable Trigger",
+            "description": "Enables the target trigger.",
+            "p": [
+                -2,
+                14,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Disable Trigger",
+            "description": "Disables the target trigger.",
+            "p": [
+                -2,
+                14,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Create Radar Event",
+            "description": "Creates a radar event at the specified Waypoint.",
+            "p": [
+                0,
+                43,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Local Set...",
+            "description": "Set the local flag. Local flags can be either 'on/set/true' or 'off/clear/false'.",
+            "p": [
+                0,
+                3,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Local Clear...",
+            "description": "Clear the local flag. Local flags can either be 'on/set/true' or 'off/clear/false'.",
+            "p": [
+                0,
+                3,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Meteor Shower at...",
+            "description": "Creates a meteor shower around the specified Waypoint.",
+            "p": [
+                0,
+                44,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Reduce Tiberium at...",
+            "description": "Reduces Tiberium around the specified Waypoint.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Sell building",
+            "description": "Sells the building attached to this trigger.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Turn off building",
+            "description": "Turns off the building attached to this trigger.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Turn on building",
+            "description": "Turns on the building attached to this trigger.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Apply 100 damage at...",
+            "description": "Applies 100 points of damage using the C4Warhead at the specified Waypoint.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Light flash small at...",
+            "description": "Shows a small light flash at location.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Light flash medium at...",
+            "description": "Shows a medium light flash at location.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Light flash large at...",
+            "description": "Shows a large light flash at location.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Announce Win",
+            "description": "Announce that the Player has won.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Announce Lose",
+            "description": "Announce that the Player has lost.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Force End",
+            "description": "Force the end of scenario.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy Tag...",
+            "description": "Destroys the tag and all attached triggers.",
+            "p": [
+                -3,
+                38,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set ambient step...",
+            "description": "Sets ambient light fade step value.",
+            "p": [
+                0,
+                45,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set ambient rate...",
+            "description": "Sets ambient light fade rate.",
+            "p": [
+                0,
+                45,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set ambient light...",
+            "description": "Fades ambient light to new lighting level.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "AI triggers begin...",
+            "description": "Starts AI triggers for the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "AI triggers stop...",
+            "description": "Stops AI triggers for the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Ratio of AI trigger teams...",
+            "description": "AI percentage of teams created for AI triggers (100 = all for AI trigger teams%1 0 = all for regular teams).",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Ratio of team aircraft...",
+            "description": "AI percentage of aircraft created for teams (100 = all for teams%1 0 = all random).",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Ratio of team infantry...",
+            "description": "AI percentage of infantry created for teams (100 = all for teams%1 0 = all random).",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Ratio of team units...",
+            "description": "AI percentage of units created for teams (100 = all for teams%1 0 = all random).",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reinforcement Team at Waypoint...",
+            "description": "Create reinforcement team at special Waypoint location.",
+            "p": [
+                -1,
+                7,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Wake up self",
+            "description": "Breaks out of sleep or harmless mode so as to enter guard mode.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Wake up all sleepers",
+            "description": "Breaks all units out of sleep mode.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Wake up all harmless",
+            "description": "Breaks all out of harmless mode.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Wake up group...",
+            "description": "Breaks all units of the specified group out of sleep mode.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Vein growth...",
+            "description": "Controls if veins grow or not.",
+            "p": [
+                0,
+                37,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Tiberium growth...",
+            "description": "Controls if Tiberium grows or not.",
+            "p": [
+                0,
+                37,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Ice growth...",
+            "description": "Controls if ice grows or not.",
+            "p": [
+                0,
+                37,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Particle Anim at...",
+            "description": "Shows particle animation at the specified location.",
+            "p": [
+                0,
+                26,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Remove Particle Anim at...",
+            "description": "Deletes particle anims at the specified location.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Lightning strike at...",
+            "description": "Sends a single Ion Storm lightning strike at the specified location.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Turn Berserk",
+            "description": "Attached object%1 who must be Cyborg=yes%1 goes berserk.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Activate AI Blasticade",
+            "description": "Turns on the specified AI House's Blasticade defense.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Deactivate AI Blasticade",
+            "description": "Turns off the specified AI House's Blasticade defense.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Ion Cannon strike...",
+            "description": "Fires an Ion Cannon at the specified Waypoint.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Tactical Nuke strike...",
+            "description": "Fires a Tactical Nuke at the specified Waypoint.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Chem Missile strike...",
+            "description": "Fires a Chemical Missile at the specified Waypoint.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Toggle Train Cargo",
+            "description": "Toggles state of cargo train dropping Crate.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Play Sound Effect anywhere...",
+            "description": "Plays sound effect at random Waypoint.",
+            "p": [
+                -7,
+                16,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Play Sound Effect at...",
+            "description": "Plays sound effect specified at Waypoint specified.",
+            "p": [
+                -7,
+                16,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Play Sidebar Movie...",
+            "description": "Displays the specified movie in the sidebar. Player still has control of interface and units.",
+            "p": [
+                0,
+                12,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Reshroud Map at...",
+            "description": "Does an anti-map ping at Waypoint specified.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Lightning Storm at...",
+            "description": "Lightning storm owned by owner of trigger at Waypoint.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Timer Text...",
+            "description": "Display the text identified by the string file's entry label with the timer.",
+            "p": [
+                -4,
+                13,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Flash Team...",
+            "description": "Flashes the specified team for the specified number of frames.",
+            "p": [
+                -5,
+                7,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Talk Bubble...",
+            "description": "Displays talk bubble over unit.",
+            "p": [
+                -1,
+                7,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set Tech Level for TechType... ",
+            "description": "Sets the specified TechType's requirements to the specified tech level.",
+            "p": [
+                -9,
+                39,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Reinforcement by Chronosphere... ",
+            "description": "Teleport reinforcement team to special Waypoint location.",
+            "p": [
+                -1,
+                7,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Create Goodie Crate at...",
+            "description": "Create a Goodie Crate with specific contents at a Waypoint.",
+            "p": [
+                0,
+                31,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Iron Curtain at...",
+            "description": "Iron Curtain Super effect at Waypoint.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Pause Game for # seconds...",
+            "description": "This will pause the game for the specified seconds.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Evict Occupiers",
+            "description": "This Action will evict all occupiers from the attached Building.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Jump Camera at Waypoint...",
+            "description": "Moves the tactical view to a specified Waypoint instantly.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Make Side Cheer...",
+            "description": "Will make all infantry who aren't busy do their cheer animation.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set Tab to (0-3)...",
+            "description": "Forces the sidebar to switch to the desired tab%1 0 for Buildings%1 1 for Armory%1 2 for Infantry and 3 for Units.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Flash Cameo...",
+            "description": "Flashes the Cameo for this TechType for this long in frames%1 15 frames equals 1 ingame second.",
+            "p": [
+                -9,
+                39,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Stop Sounds at...",
+            "description": "Stops all sounds at Waypoint that were started using the 'Play Sound at' trigger.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Play Sidebar Movie and pause...",
+            "description": "Displays the specified movie in the sidebar. Game pauses while the movie is playing. Player has no control during the movie.",
+            "p": [
+                0,
+                12,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Clear all Smudges",
+            "description": "Deletes all Smudge objects from the map.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy all of...",
+            "description": "Kills everything of the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy all Buildings of...",
+            "description": "Kills all buildings of the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy all Land Units of...",
+            "description": "Kills all land units of the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Destroy all Naval Units of...",
+            "description": "Kills all naval units of the specified House.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Mind Control Base of...",
+            "description": "The trigger's owning House will mind control the specified House's base.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Restore Mind-Controlled Base to...",
+            "description": "The trigger's owning House will give all buildings that belonged to the specified House back to it.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Create Building at...",
+            "description": "The trigger's owning House will gain this type of building at this Waypoint. Overlays will be cleared and units moved away.",
+            "p": [
+                -10,
+                47,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Restore Starting TechTypes of...",
+            "description": "All buildings and units the specified House had at the start of the game will be recreated. Will move units away and erase Overlays.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Chrono Screen Effect for...",
+            "description": "Will tile the screen with the full screen chrono effect for this many frames%1 15 frames equals 1 ingame second.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Teleport All to...",
+            "description": "All Units of the trigger's owning House will teleport to Waypoint.",
+            "p": [
+                0,
+                30,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Set Superweapon Charge...",
+            "description": "The trigger's owning House will have this Superweapon charged to this percent%1 if they have the Superweapon building. Takes an int (0-100).",
+            "p": [
+                -11,
+                20,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Restore Starting Buildings of...",
+            "description": "All buildings the specified House had at the start of the game will be healed or recreated. Will move units away and erase Overlays.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Flash Buildings of Type...",
+            "description": "All buildings of this type owned by the trigger's owning House will flash for this many frames%1 15 frames equals 1 ingame second",
+            "p": [
+                -9,
+                47,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Superweapon Set Recharge Time...",
+            "description": "Changes the time in frames this Superweapon takes to charge the next time it is reset%1 set%1 or fired%1 15 frames equals 1 ingame second.",
+            "p": [
+                -11,
+                20,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Superweapon Reset Recharge Time...",
+            "description": "Changes the time in frames this Superweapon takes to charge back to normal%1 15 frames equals 1 ingame second.",
+            "p": [
+                -11,
+                20,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Superweapon Reset...",
+            "description": "Resets a Superweapon as if a spy had gotten in.",
+            "p": [
+                0,
+                36,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Preferred Target Cell Set...",
+            "description": "The trigger's owning House will aim all future targetable Superweapons at this Waypoint.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Preferred Target Cell Clear",
+            "description": "The trigger's owning House will go back to targeting its Superweapons normally.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Center Base Cell Set...",
+            "description": "The trigger's owning House will consider the center of its base to be this Waypoint.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Center Base Cell Clear",
+            "description": "The trigger's owning House will go back to computing its center.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Blackout Radar...",
+            "description": "The trigger's owning House will have a radar blackout for this many frames%1 15 frames equals 1 ingame second.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Force Shield Target Cell Set...",
+            "description": "The trigger's owning House will aim all future Force Shields at this Waypoint.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Force Shield Target Cell Clear",
+            "description": "The trigger's owning House will go back to targeting its Force Shields normally.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Retint Red...",
+            "description": "Retints the Red portion of the screen.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Retint Green...",
+            "description": "Retints the Green portion of the screen.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Retint Blue...",
+            "description": "Retints the Blue portion of the screen.",
+            "p": [
+                0,
+                6,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Jump camera home",
+            "description": "Returns home%1 just like hitting the default 'H' key.",
+            "p": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Add auxiliary power for a House...",
+            "description": "Adds an amount of auxiliary power for specified House. Amount can be negative.",
+            "p": [
+                -11,
+                2,
+                0,
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "name": "Kill drivers of attached units",
+            "description": "Kills the drivers of all units that this trigger is attached to%1 resulting in the units changing House to the one specified.",
+            "p": [
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set EVA voice...",
+            "description": "Sets the Player's EVA voice. Use 0%1 1%1 2 and 3 for Allied%1 Soviet%1 Epsilon and Foehn respectively. Use -1 to disable EVA completely.",
+            "p": [
+                0,
+                50,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Set group...",
+            "description": "Sets the group for the object that this trigger is attached to.",
+            "p": [
+                0,
+                51,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ]
+}

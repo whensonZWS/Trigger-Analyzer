@@ -33,17 +33,21 @@ var sb = document.getElementById('stopBtn');
 sb.addEventListener("click",(e)=>{
     network.stopSimulation();
 });
-//dangerous sync load!!!!!
+//async load!!!!!
 var fadata = new XMLHttpRequest();
-fadata.open('GET','./fadata.json',false);
+
+fadata.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+        fadata = JSON.parse(fadata.responseText);
+        events = fadata.events;
+        actions = fadata.actions;
+    }
+};
+fadata.open('GET','./fadata.json',true);
 fadata.send();
-var events = []
-var actions = []
-if(fadata.status == 200){
-    fadata = JSON.parse(fadata.responseText);
-    events = fadata.events;
-    actions = fadata.actions;
-}
+var events = [];
+var actions = [];
+
 
 
 
@@ -60,13 +64,28 @@ window.onload = function() {
 				reader.onload = function(e) {
                     document.getElementById('searchBox').value = '';
                     network.destroy();
-					raw = parseText(reader.result);
-                    generateNetwork(raw);
+                    var info = document.getElementById('info');
+                    info.innerHTML = 'File detected, attempting to load...';
+                    try{
+                        raw = parseText(reader.result);
+                        try{
+                            generateNetwork(raw);
+                        }catch{
+                            alert('Unable to generate network graph!')
+                            info.innerHTML = 'File loading failed.';
+                        }
+                        
+                    }catch{
+                        alert('Map file parse Error!');
+                        info.innerHTML = 'File loading failed.';
+                    }
+					
+                    
                     
 				}
 				reader.readAsText(file);
 			} else {
-				console.log("File not supported!")
+				alert("File is not plain text!");
 			}
 	});
 }
@@ -149,7 +168,8 @@ function displayInfo(raw){
             d.className = 'listItem';
             for(j=0;j<7;j++){
                 if(actions[t].p[j]>0){
-                    d.innerHTML += ` ${raw.actions[i].p[j]}`
+                    if(j!=6) d.innerHTML += ` ${raw.actions[i].p[j]}`;
+                    else d.innerHTML += ` @${wp(raw.actions[i].p[j])}`;
                 }
             }
             d3.appendChild(d);
@@ -195,9 +215,14 @@ function generateNetwork(raw) {
             barnesHut: {
                 springLength: 120,
                 springConstant: 0.05,
-                centralGravity: 0.4,
+                centralGravity: 0.4
+                
             },
-            timestep: 0.4
+            
+        },
+        layout: {
+            improvedLayout: false,
+            
         }
         
     }
@@ -225,7 +250,7 @@ function generateNetwork(raw) {
         document.getElementById('info').innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
     });
     network.once("stabilizationIterationsDone", function () {
-        document.getElementById('info').innerText = "Fully Loaded";
+        document.getElementById('info').innerText = `100% Loaded. \nAssets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`;
         var nl = document.getElementById('nodesList');
         for(var i=0;i<nodes.length;i++){
             var d = document.createElement('div');
@@ -306,6 +331,7 @@ function parseEvents(str,parent_id,edges){
 function parseActions(str,parent_id,edges){
     var arr = str.split(',');
     var actions = [];
+    const n = arr[0];
     for(var i=1;i<arr.length;i+=8){
         var obj = {};
         obj.type = parseInt(arr[i]);
@@ -334,7 +360,7 @@ function parseActions(str,parent_id,edges){
                 edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000", width:2, dashes: true});
                 break;
         }
-        
+        if(actions.length == n) break;
     }
     return actions;
 }
@@ -383,7 +409,6 @@ function bind_coll(){
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
-            console.log(content.style.maxHeight)
             if (content.style.maxHeight != '0px'){
                 content.style.maxHeight = '0px';
             } else {
@@ -392,4 +417,15 @@ function bind_coll(){
         });
         
     }
+}
+
+function wp(str){
+    const alp = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var r = 0;
+    for(var i=0;i<str.length;i++){
+        
+        r = r*26 + alp.indexOf(str[i]) + 1;
+    }
+    
+    return (r - 1);
 }

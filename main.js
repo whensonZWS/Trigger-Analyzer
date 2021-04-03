@@ -1,18 +1,10 @@
-//dangerous sync load!!!!!
+// global variables
 var container = document.getElementById('mynetwork');
 var focusOptions = {scale: 1,offset: { x: 0, y: 0},animation: {duration: 1000,easingFunction: "easeInOutQuad"},};
-var fadata = new XMLHttpRequest();
-fadata.open('GET','./fadata.json',false);
-fadata.send();
-var events = []
-var actions = []
-if(fadata.status == 200){
-    fadata = JSON.parse(fadata.responseText);
-    events = fadata.events;
-    actions = fadata.actions;
-
-}
-
+// simple init
+var network = new vis.Network(container, {nodes:[],edges:[]});
+var nodesView = new vis.DataView(new vis.DataSet({}));
+// global options for filters
 var nodeFilterValue = '';
 const nodesFilter = (node) => {
     if(nodeFilterValue == ''){
@@ -27,16 +19,35 @@ const nodesFilter = (node) => {
             return true;
     }
 };
-
-var network = new vis.Network(container, {nodes:[],edges:[]});
-var nodesView = new vis.DataView(new vis.DataSet({}));
-nfs = document.getElementById("nodeFilterSelect");
+var nfs = document.getElementById("nodeFilterSelect");
 nfs.addEventListener("change", (e) => {
     nodeFilterValue = e.target.value;
     nodesView.refresh();
 });
+// global physics
+var pc = document.getElementById("physicsCheck");
+pc.addEventListener("change", (e) =>{
+    network.setOptions({physics:{enabled:e.target.checked}});
+});
+var sb = document.getElementById('stopBtn');
+sb.addEventListener("click",(e)=>{
+    network.stopSimulation();
+});
+//dangerous sync load!!!!!
+var fadata = new XMLHttpRequest();
+fadata.open('GET','./fadata.json',false);
+fadata.send();
+var events = []
+var actions = []
+if(fadata.status == 200){
+    fadata = JSON.parse(fadata.responseText);
+    events = fadata.events;
+    actions = fadata.actions;
+}
 
 
+
+//on load initialization
 window.onload = function() {
     document.getElementById('searchBox').value = '';
     var fileInput = document.getElementById('fileInput');
@@ -62,75 +73,8 @@ window.onload = function() {
 
 
 
-function parseINIString(data){
-    var regex = {
-        section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
-        param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
-        comment: /^\s*;.*$/
-    };
-    var value = {};
-    var lines = data.split(/[\r\n]+/);
-    var section = null;
-    lines.forEach(function(line){
-        if(regex.comment.test(line)){
-            return;
-        }else if(regex.param.test(line)){
-            var match = line.match(regex.param);
-            if(section){
-                value[section][match[1]] = match[2];
-            }else{
-                value[match[1]] = match[2];
-            }
-        }else if(regex.section.test(line)){
-            var match = line.match(regex.section);
-            value[match[1]] = {};
-            section = match[1];
-        }else if(line.length == 0 && section){
-            section = null;
-        };
-    });
-    return value;
-}
-
-function parseText(data){
-    config = parseINIString(data);
-    var nodes = [];
-    var edges = [];
-    for(var item in config.Tags){
-        var temp = config.Tags[item].split(',');
-        var obj = {};
-        obj.tag_id = item;
-        obj.repeat = parseInt(temp[0]);
-        obj.id = temp[2];
-        var arr = config.Triggers[obj.id].split(',');
-        obj.label = arr[2];
-        obj.house = arr[0];
-        obj.link = arr[1];
-        obj.easy = parseInt(arr[6]);
-        obj.normal = parseInt(arr[5]);
-        obj.hard = parseInt(arr[4]);
-        obj.disabled = parseInt(arr[3]);
-        obj.events = parseEvents(config.Events[obj.id],obj.id,edges);
-        obj.actions = parseActions(config.Actions[obj.id],obj.id,edges);
-        obj.shape = "box";
-        obj.mass = 2;
-        if(obj.disabled){
-            obj.color = {border:'red',highlight:{border:'red'}};
-        }
-        nodes.push(obj);
-        //console.log(obj);
-    }
-    for(var item in config.VariableNames){
-         var temp = config.VariableNames[item].split(',');
-         nodes.push({id:item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
-
-    }
-    result = {nodes, edges};
-    return result;
-}
-
-// filter
-function filterFunc(){
+// search filter function
+function searchFilterFunc(){
     var input = document.getElementById('searchBox');
     var filter = input.value.toLowerCase();
     var info = document.getElementById('info');
@@ -149,14 +93,7 @@ function filterFunc(){
     
 }
 
-
-
-
-// requesting files
-// var xmlhttp = new XMLHttpRequest();
-// var url = './nodes.json';
-
-
+// receive json and populate information box
 function displayInfo(raw){
     var info = document.getElementById('info');
     while(info.hasChildNodes()){
@@ -164,18 +101,28 @@ function displayInfo(raw){
     }
     // Triggers:
     if(raw.house){
+        var d0 = document.createElement('div');
+        d0.innerHTML = `<div class='listItem'>Name:&nbsp;${raw.label}</div><div class='listItem'>ID:&nbsp;${raw.id}</div>`;
+        var btn1 = document.createElement('button');
+        btn1.innerHTML = 'Basic Info:';
+        btn1.className = 'collapsible active';
         var d1 = document.createElement('div');
+        d1.className = 'content';
         // basic info
-        d1.innerText =  `Name: ${raw.label} \nID: ${raw.id}\nHouse: ${raw.house}\nRepeat: ${raw.repeat}\nDifficulty:`;
+        d1.innerHTML =  `<div class='listItem'>House: ${raw.house}</div> <div class='listItem'>Repeat: ${raw.repeat}</div>`;
         easy = raw.easy?'green':'red';
         normal = raw.normal?'green':'red';
         hard = raw.hard?'green':'red';
         disabled = raw.disabled?'red':'green';
-        d1.innerHTML += `&nbsp;<span class='${easy}'>Easy</span>&nbsp;&nbsp;<span class='${normal}'>Normal</span>&nbsp;&nbsp;<span class='${hard}'>Hard</span><br>`;
-        d1.innerHTML += `Disabled:&nbsp;<span class='${disabled}'>${raw.disabled?"True":"False"}</span>`;
+        d1.innerHTML += `<div class='listItem'>Difficulty:&nbsp;<span class='${easy}'>Easy</span>&nbsp;&nbsp;<span class='${normal}'>Normal</span>&nbsp;&nbsp;<span class='${hard}'>Hard</span></div>`;
+        d1.innerHTML += `<div class='listItem'>Disabled:&nbsp;<span class='${disabled}'>${raw.disabled?"True":"False"}</span></div>`;
         // events
+        var btn2 = document.createElement('button');
+        btn2.innerHTML = 'Events:';
+        btn2.className = 'collapsible active';
+
         var d2 = document.createElement('div');
-        d2.innerHTML += 'Events:'
+        d2.className = 'content';
         for(var i=0;i<raw.events.length;i++){
             var t = raw.events[i].type;
             var d = document.createElement('div');
@@ -190,8 +137,11 @@ function displayInfo(raw){
         }
 
         //actions
+        var btn3 = document.createElement('button');
+        btn3.innerHTML = 'Actions:';
+        btn3.className = 'collapsible active';
         var d3 = document.createElement('div');
-        d3.innerHTML += 'Actions:'
+        d3.className = 'content';
         for(var i=0;i<raw.actions.length;i++){
             var t = raw.actions[i].type;
             var d = document.createElement('div');
@@ -204,16 +154,21 @@ function displayInfo(raw){
             }
             d3.appendChild(d);
         }
+        info.appendChild(d0);
+        info.appendChild(btn1);
         info.appendChild(d1);
+        info.appendChild(btn2);
         info.appendChild(d2);
+        info.appendChild(btn3);
         info.appendChild(d3);
+        bind_coll();
     }else{
         info.innerHTML = `Variable <br> Name:&nbsp;${raw.label}<br>ID:&nbsp;${raw.id}<br>Initial Value:&nbsp;${raw.initValue}`;
     
     }
 }
 
-
+// receive nodes/edge json and generate network
 function generateNetwork(raw) {
 
     var nodes = raw.nodes;
@@ -290,8 +245,37 @@ function generateNetwork(raw) {
 };
 
 
-//xmlhttp.open('GET',url,true);
-//xmlhttp.send();
+
+
+function parseINIString(data){
+    var regex = {
+        section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
+        param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
+        comment: /^\s*;.*$/
+    };
+    var value = {};
+    var lines = data.split(/[\r\n]+/);
+    var section = null;
+    lines.forEach(function(line){
+        if(regex.comment.test(line)){
+            return;
+        }else if(regex.param.test(line)){
+            var match = line.match(regex.param);
+            if(section){
+                value[section][match[1]] = match[2];
+            }else{
+                value[match[1]] = match[2];
+            }
+        }else if(regex.section.test(line)){
+            var match = line.match(regex.section);
+            value[match[1]] = {};
+            section = match[1];
+        }else if(line.length == 0 && section){
+            section = null;
+        };
+    });
+    return value;
+}
 
 function parseEvents(str,parent_id,edges){
     var arr = str.split(',');
@@ -353,4 +337,59 @@ function parseActions(str,parent_id,edges){
         
     }
     return actions;
+}
+
+function parseText(data){
+    config = parseINIString(data);
+    var nodes = [];
+    var edges = [];
+    for(var item in config.Tags){
+        var temp = config.Tags[item].split(',');
+        var obj = {};
+        obj.tag_id = item;
+        obj.repeat = parseInt(temp[0]);
+        obj.id = temp[2];
+        var arr = config.Triggers[obj.id].split(',');
+        obj.label = arr[2];
+        obj.house = arr[0];
+        obj.link = arr[1];
+        obj.easy = parseInt(arr[6]);
+        obj.normal = parseInt(arr[5]);
+        obj.hard = parseInt(arr[4]);
+        obj.disabled = parseInt(arr[3]);
+        obj.events = parseEvents(config.Events[obj.id],obj.id,edges);
+        obj.actions = parseActions(config.Actions[obj.id],obj.id,edges);
+        obj.shape = "box";
+        obj.mass = 2;
+        if(obj.disabled){
+            obj.color = {border:'red',highlight:{border:'red'}};
+        }
+        nodes.push(obj);
+        //console.log(obj);
+    }
+    for(var item in config.VariableNames){
+         var temp = config.VariableNames[item].split(',');
+         nodes.push({id:item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
+
+    }
+    result = {nodes, edges};
+    return result;
+}
+
+function bind_coll(){
+    var coll = document.getElementsByClassName("collapsible");
+
+    for (var i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            console.log(content.style.maxHeight)
+            if (content.style.maxHeight != '0px'){
+                content.style.maxHeight = '0px';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+        
+    }
 }

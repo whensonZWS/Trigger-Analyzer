@@ -42,7 +42,7 @@
         }
 
         .listItem {
-            padding: 5px 0px 5px 0px;
+            padding: 2px 0px 2px 5px;
             font-family:Consolas, monospace;
             user-select: none;
         }
@@ -53,30 +53,52 @@
 
         .green {
             color: rgb(0, 212, 0);
+            font-weight: bold;
         }
         .red {
             color: red;
             text-decoration: line-through;
+            font-weight: bold;
         }
+        .collapsible{
+            background-color: #777777;
+            color: white;
+            cursor: pointer;
+            padding: 5px 0px 5px 5px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+        .active, .collapsible:hover {
+            background-color: #777777;
+        }
+        .content {
+            max-height: scroll-height +'px';
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
     </style>
 </head>
 <body>
-<input type="file" id="fileInput" accept=".map">
+<input type="file" id="fileInput" accept=".map" autocomplete="off">
 <label>
     Filter:
-    <select id="nodeFilterSelect">
+    <select id="nodeFilterSelect" autocomplete="off">
         <option value> All </option>
         <option value="triggers"> Triggers </option>
         <option value="variables"> Variables </option>
     </select>
 </label>
+<input type="checkbox" id="physicsCheck" name="physics" value="physics" checked autocomplete="off">Physics Enabled
+<button id='stopBtn'> Stop!</button>
 <div id="info"></div>
 <div id="nodesList"></div>
-<input type="text" id="searchBox" placeholder="Search By Trigger Name or ID" onkeyup="filterFunc()">
+<input type="text" id='searchBox' placeholder="Search By Trigger Name or ID" onkeyup="searchFilterFunc()">
 <div id="mynetwork"></div>
 
-<script src='main.js'>
-    
-</script>
+<script src='main.js'></script>
 </body>
 </html>

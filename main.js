@@ -1,3 +1,42 @@
+//dangerous sync load!!!!!
+var container = document.getElementById('mynetwork');
+var focusOptions = {scale: 1,offset: { x: 0, y: 0},animation: {duration: 1000,easingFunction: "easeInOutQuad"},};
+var fadata = new XMLHttpRequest();
+fadata.open('GET','./fadata.json',false);
+fadata.send();
+var events = []
+var actions = []
+if(fadata.status == 200){
+    fadata = JSON.parse(fadata.responseText);
+    events = fadata.events;
+    actions = fadata.actions;
+
+}
+
+var nodeFilterValue = '';
+const nodesFilter = (node) => {
+    if(nodeFilterValue == ''){
+        return true;
+    }
+    switch(nodeFilterValue){
+        case 'triggers':
+            return node.house != undefined;
+        case 'variables':
+            return node.house == undefined;
+        default:
+            return true;
+    }
+};
+
+var network = new vis.Network(container, {nodes:[],edges:[]});
+var nodesView = new vis.DataView(new vis.DataSet({}));
+nfs = document.getElementById("nodeFilterSelect");
+nfs.addEventListener("change", (e) => {
+    nodeFilterValue = e.target.value;
+    nodesView.refresh();
+});
+
+
 window.onload = function() {
     document.getElementById('searchBox').value = '';
     var fileInput = document.getElementById('fileInput');
@@ -8,15 +47,20 @@ window.onload = function() {
 			if (file.type.match(textType)) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
+                    document.getElementById('searchBox').value = '';
+                    network.destroy();
 					raw = parseText(reader.result);
                     generateNetwork(raw);
+                    
 				}
-				reader.readAsText(file);	
+				reader.readAsText(file);
 			} else {
 				console.log("File not supported!")
 			}
 	});
 }
+
+
 
 function parseINIString(data){
     var regex = {
@@ -66,15 +110,20 @@ function parseText(data){
         obj.normal = parseInt(arr[5]);
         obj.hard = parseInt(arr[4]);
         obj.disabled = parseInt(arr[3]);
-        obj.events = parseEvents(config.Events[obj.id]);
+        obj.events = parseEvents(config.Events[obj.id],obj.id,edges);
         obj.actions = parseActions(config.Actions[obj.id],obj.id,edges);
+        obj.shape = "box";
+        obj.mass = 2;
         if(obj.disabled){
-            obj.color = {border:'red'};
-        }else{
-            obj.color = {border:'#2B7CE9'}
+            obj.color = {border:'red',highlight:{border:'red'}};
         }
         nodes.push(obj);
         //console.log(obj);
+    }
+    for(var item in config.VariableNames){
+         var temp = config.VariableNames[item].split(',');
+         nodes.push({id:item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
+
     }
     result = {nodes, edges};
     return result;
@@ -101,20 +150,7 @@ function filterFunc(){
 }
 
 
-//dangerous sync load!!!!!
-var container = document.getElementById('mynetwork');
-var focusOptions = {scale: 1,offset: { x: 0, y: 0},animation: {duration: 1000,easingFunction: "easeInOutQuad"},};
-var fadata = new XMLHttpRequest();
-fadata.open('GET','./fadata.json',false);
-fadata.send();
-var events = []
-var actions = []
-if(fadata.status == 200){
-    fadata = JSON.parse(fadata.responseText);
-    events = fadata.events;
-    actions = fadata.actions;
 
-}
 
 // requesting files
 // var xmlhttp = new XMLHttpRequest();
@@ -126,48 +162,55 @@ function displayInfo(raw){
     while(info.hasChildNodes()){
         info.removeChild(info.childNodes[0]);
     }
-    var d1 = document.createElement('div');
-    // basic info
-    d1.innerText =  `Name: ${raw.label} \nID: ${raw.id}\nHouse: ${raw.house}\nRepeat: ${raw.repeat}\nDifficulty:`;
-    easy = raw.easy?'green':'red';
-    normal = raw.normal?'green':'red';
-    hard = raw.hard?'green':'red';
-    d1.innerHTML += `<span class='${easy}'>Easy</span>&nbsp;&nbsp;<span class='${normal}'>Normal</span>&nbsp;&nbsp;<span class='${hard}'>Hard</span><br><br>`;
-    
-    // events
-    var d2 = document.createElement('div');
-    d2.innerHTML += 'Events:'
-    for(var i=0;i<raw.events.length;i++){
-        var t = raw.events[i].type;
-        var d = document.createElement('div');
-        d.className = 'listItem';
-        d.innerHTML += `Event ${i}: ${events[t].name}`;
-        if(events[t].p[0] > 0){
-            d.innerHTML += ` ${raw.events[i].p[0]} ${raw.events[i].p[1]}`;
-        }else{
-            d.innerHTML += ` ${raw.events[i].p[0]}`
-        }
-        d2.appendChild(d);
-    }
-
-    //actions
-    var d3 = document.createElement('div');
-    d3.innerHTML += 'Actions:'
-    for(var i=0;i<raw.actions.length;i++){
-        var t = raw.actions[i].type;
-        var d = document.createElement('div');
-        d.innerHTML += `Action ${i}: ${actions[t].name}`;
-        d.className = 'listItem';
-        for(j=0;j<7;j++){
-            if(actions[t].p[j]>0){
-                d.innerHTML += ` ${raw.actions[i].p[j]}`
+    // Triggers:
+    if(raw.house){
+        var d1 = document.createElement('div');
+        // basic info
+        d1.innerText =  `Name: ${raw.label} \nID: ${raw.id}\nHouse: ${raw.house}\nRepeat: ${raw.repeat}\nDifficulty:`;
+        easy = raw.easy?'green':'red';
+        normal = raw.normal?'green':'red';
+        hard = raw.hard?'green':'red';
+        disabled = raw.disabled?'red':'green';
+        d1.innerHTML += `&nbsp;<span class='${easy}'>Easy</span>&nbsp;&nbsp;<span class='${normal}'>Normal</span>&nbsp;&nbsp;<span class='${hard}'>Hard</span><br>`;
+        d1.innerHTML += `Disabled:&nbsp;<span class='${disabled}'>${raw.disabled?"True":"False"}</span>`;
+        // events
+        var d2 = document.createElement('div');
+        d2.innerHTML += 'Events:'
+        for(var i=0;i<raw.events.length;i++){
+            var t = raw.events[i].type;
+            var d = document.createElement('div');
+            d.className = 'listItem';
+            d.innerHTML += `Event ${i}: ${events[t].name}`;
+            if(events[t].p[0] > 0){
+                d.innerHTML += ` ${raw.events[i].p[0]} ${raw.events[i].p[1]}`;
+            }else{
+                d.innerHTML += ` ${raw.events[i].p[0]}`
             }
+            d2.appendChild(d);
         }
-        d3.appendChild(d);
+
+        //actions
+        var d3 = document.createElement('div');
+        d3.innerHTML += 'Actions:'
+        for(var i=0;i<raw.actions.length;i++){
+            var t = raw.actions[i].type;
+            var d = document.createElement('div');
+            d.innerHTML += `Action ${i}: ${actions[t].name}`;
+            d.className = 'listItem';
+            for(j=0;j<7;j++){
+                if(actions[t].p[j]>0){
+                    d.innerHTML += ` ${raw.actions[i].p[j]}`
+                }
+            }
+            d3.appendChild(d);
+        }
+        info.appendChild(d1);
+        info.appendChild(d2);
+        info.appendChild(d3);
+    }else{
+        info.innerHTML = `Variable <br> Name:&nbsp;${raw.label}<br>ID:&nbsp;${raw.id}<br>Initial Value:&nbsp;${raw.initValue}`;
+    
     }
-    info.appendChild(d1);
-    info.appendChild(d2);
-    info.appendChild(d3);
 }
 
 
@@ -183,22 +226,29 @@ function generateNetwork(raw) {
     }
     //var nodes = new vis.DataSet(raw.nodes);
     //var edges = new vis.DataSet(raw.edges);
+    nodesView = new vis.DataView(new vis.DataSet(nodes),{filter:nodesFilter});
     var data = {
-        nodes: nodes,
+        nodes: nodesView,
         edges: edges
     };  
     var options = {
-        nodes: {
-            shape: "box"
-        },
         interaction: {
             navigationButtons: true,
             keyboard: true
+        },
+        physics:{
+            barnesHut: {
+                springLength: 120,
+                springConstant: 0.05,
+                centralGravity: 0.4,
+            },
+            timestep: 0.4
         }
+        
     }
     
 
-    var network = new vis.Network(container, data, options);            
+    network = new vis.Network(container, data, options);            
     
     network.on("click", function (params) {
         if(params.nodes.length > 0){
@@ -216,7 +266,8 @@ function generateNetwork(raw) {
 
 
     network.on("stabilizationProgress", function (params) {
-        document.getElementById('info').innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%';
+        document.getElementById('info').innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%\n';
+        document.getElementById('info').innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
     });
     network.once("stabilizationIterationsDone", function () {
         document.getElementById('info').innerText = "Fully Loaded";
@@ -242,7 +293,7 @@ function generateNetwork(raw) {
 //xmlhttp.open('GET',url,true);
 //xmlhttp.send();
 
-function parseEvents(str){
+function parseEvents(str,parent_id,edges){
     var arr = str.split(',');
     var events = [];
     for(var i=1;i<arr.length;i+=3){
@@ -254,6 +305,14 @@ function parseEvents(str){
             i++;
         }else{
             obj.p = [arr[i+2]];
+        }
+        switch(obj.type){
+            case 36:
+                edges.push({from: obj.p[0], to: parent_id, arrows: "to", color: "#00FF00", width:2, dashes: true});
+                break;
+            case 37:
+                edges.push({from: obj.p[0], to: parent_id, arrows: "to", color: "#FF0000", width:2, dashes: true});
+                break;
         }
         events.push(obj);
     }
@@ -271,12 +330,27 @@ function parseActions(str,parent_id,edges){
             obj.p.push(arr[i+j]);
         }
         actions.push(obj);
-        if(obj.type == 53){
-            edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#00FF00", width:2});
+        switch(obj.type){
+            case 12:
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FFFF00", width:2});
+                break;
+            case 22:
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#0000FF", width:2});
+                break;
+            case 53:
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#00FF00", width:2});
+                break;
+            case 54:
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000", width:2});
+                break;
+            case 56:
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#00FF00", width:2, dashes: true});
+                break;
+            case 57:
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000", width:2, dashes: true});
+                break;
         }
-        if(obj.type == 54){
-            edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000", width:2});
-        }
+        
     }
     return actions;
 }

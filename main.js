@@ -78,14 +78,11 @@ window.onload = function() {
                     }catch{
                         alert('Map file parse Error!');
                         info.innerHTML = 'File loading failed.';
-                    }
-					
-                    
-                    
+                    }                     
 				}
 				reader.readAsText(file);
 			} else {
-				alert("File is not plain text!");
+				alert(`Uploaded file has unexpected type: \n\n${file.type}!\n\nChoose a plain text instead.`);
 			}
 	});
 }

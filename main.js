@@ -58,32 +58,32 @@ window.onload = function() {
 
     fileInput.addEventListener('change', function(e) {
         var file = fileInput.files[0];
-			var textType = /text.*/;
-			if (file.type.match(textType)) {
-				var reader = new FileReader();
-				reader.onload = function(e) {
-                    document.getElementById('searchBox').value = '';
-                    network.destroy();
-                    var info = document.getElementById('info');
-                    info.innerHTML = 'File detected, attempting to load...';
-                    try{
-                        raw = parseText(reader.result);
-                        try{
-                            generateNetwork(raw);
-                        }catch{
-                            alert('Unable to generate network graph!')
-                            info.innerHTML = 'File loading failed.';
-                        }
-                        
-                    }catch{
-                        alert('Map file parse Error!');
-                        info.innerHTML = 'File loading failed.';
-                    }                     
-				}
-				reader.readAsText(file);
-			} else {
-				alert(`Uploaded file has unexpected type: \n\n${file.type}!\n\nChoose a plain text instead.`);
-			}
+        //var textType = /text.*/;
+        //if (file.type.match(textType)) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('searchBox').value = '';
+            network.destroy();
+            var info = document.getElementById('info');
+            info.innerHTML = 'File detected, attempting to load...';
+            try{
+                raw = parseText(e.target.result);
+                try{
+                    generateNetwork(raw);
+                }catch{
+                    alert('Unable to generate network graph!')
+                    info.innerHTML = 'File loading failed.';
+                }
+            }catch{
+                alert('Map file parse Error!');
+                info.innerHTML = 'File loading failed.';
+            }                     
+        }
+        reader.readAsText(file, 'UTF-8');
+        reader.onerror(error=>console.log(error));
+        //} else {
+        //	alert(`Uploaded file has unexpected type: \n\n${file.type}!\n\nChoose a plain text instead.`);
+        //}
 	});
 }
 

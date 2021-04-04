@@ -2,7 +2,7 @@
 var container = document.getElementById('mynetwork');
 var focusOptions = {scale: 1,offset: { x: 0, y: 0},animation: {duration: 1000,easingFunction: "easeInOutQuad"},};
 // simple init
-var network = new vis.Network(container, {nodes:[],edges:[]});
+var network = new vis.Network(container, {nodes:[{id:0,label:"Load an MO map file",shape:"box"},{id:1,label:"to see the triggers!",shape:"box"}],edges:[{from:0,to:1,arrows:"to",length:250}]},{});
 var nodesView = new vis.DataView(new vis.DataSet({}));
 // global options for filters
 var nodeFilterValue = '';

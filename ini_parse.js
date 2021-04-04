@@ -32,44 +32,44 @@ function parseINIString(data){
     return value;
 }
 
-fs.readFile('./sexist.map','utf-8',(error,data)=>{
-    if(error){
-        console.log('file read fail');
-    }else{
-        config = parseINIString(data);
-        var nodes = [];
-        for(var item in config.Tags){
-            var temp = config.Tags[item].split(',');
-            var obj = {};
-            obj.tag_id = item;
-            obj.repeat = parseInt(temp[0]);
-            obj.id = temp[2];
-            var arr = config.Triggers[obj.id].split(',');
-            obj.label = arr[2];
-            obj.house = arr[0];
-            obj.link = arr[1];
-            obj.easy = parseInt(arr[6]);
-            obj.normal = parseInt(arr[5]);
-            obj.hard = parseInt(arr[4]);
-            obj.disabled = parseInt(arr[3]);
-            obj.events = parseEvents(config.Events[obj.id]);
-            obj.actions = parseActions(config.Actions[obj.id],obj.id);
-            if(obj.disabled){
-                obj.color = {border:'red'};
-            }else{
-                obj.color = {border:'#2B7CE9'}
-            }
-            nodes.push(obj);
-            //console.log(obj);
-        }
-        data = {nodes, edges};
-        fs.writeFile('./nodes.json',JSON.stringify(data,null,4),error =>{
-            if(error){
-                console.log(error);
-            }
-        });
-    }
-});
+// fs.readFile('./sexist.map','utf-8',(error,data)=>{
+//     if(error){
+//         console.log('file read fail');
+//     }else{
+//         config = parseINIString(data);
+//         var nodes = [];
+//         for(var item in config.Tags){
+//             var temp = config.Tags[item].split(',');
+//             var obj = {};
+//             obj.tag_id = item;
+//             obj.repeat = parseInt(temp[0]);
+//             obj.id = temp[2];
+//             var arr = config.Triggers[obj.id].split(',');
+//             obj.label = arr[2];
+//             obj.house = arr[0];
+//             obj.link = arr[1];
+//             obj.easy = parseInt(arr[6]);
+//             obj.normal = parseInt(arr[5]);
+//             obj.hard = parseInt(arr[4]);
+//             obj.disabled = parseInt(arr[3]);
+//             obj.events = parseEvents(config.Events[obj.id]);
+//             obj.actions = parseActions(config.Actions[obj.id],obj.id);
+//             if(obj.disabled){
+//                 obj.color = {border:'red'};
+//             }else{
+//                 obj.color = {border:'#2B7CE9'}
+//             }
+//             nodes.push(obj);
+//             //console.log(obj);
+//         }
+//         data = {nodes, edges};
+//         fs.writeFile('./nodes.json',JSON.stringify(data),error =>{
+//             if(error){
+//                 console.log(error);
+//             }
+//         });
+//     }
+// });
 
 fs.readFile('./fadata.ini','utf-8',(error,data)=>{
     if(error){
@@ -95,7 +95,7 @@ fs.readFile('./fadata.ini','utf-8',(error,data)=>{
             actions.push(obj);
         }
         
-        fs.writeFile('./fadata.json',JSON.stringify({events,actions},null,4),error =>{
+        fs.writeFile('./fadata.json',JSON.stringify({events,actions}),error =>{
             if(error){
                 console.log(error);
             }

@@ -66,12 +66,13 @@ window.onload = function() {
             network.destroy();
             var info = document.getElementById('info');
             info.innerHTML = 'File detected, attempting to load...';
+            console.log(e.target.result)
             try{
                 raw = parseText(e.target.result);
                 try{
                     generateNetwork(raw);
-                }catch{
-                    alert('Unable to generate network graph!')
+                }catch(error){
+                    alert('Unable to generate network graph!',error)
                     info.innerHTML = 'File loading failed.';
                 }
             }catch{
@@ -80,7 +81,7 @@ window.onload = function() {
             }                     
         }
         reader.readAsText(file, 'UTF-8');
-        reader.onerror(error=>console.log(error));
+        reader.onerror = error=>console.log(error);
         //} else {
         //	alert(`Uploaded file has unexpected type: \n\n${file.type}!\n\nChoose a plain text instead.`);
         //}

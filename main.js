@@ -111,7 +111,7 @@ function searchFilterFunc(){
     
 }
 
-// receive json and populate information box
+// receive an object and populate information box
 function displayInfo(raw){
     var info = document.getElementById('info');
     while(info.hasChildNodes()){
@@ -187,7 +187,7 @@ function displayInfo(raw){
     }
 }
 
-// receive nodes/edge json and generate network
+// receive nodes/edge object and generate network
 function generateNetwork(raw) {
 
     var nodes = raw.nodes;
@@ -247,9 +247,15 @@ function generateNetwork(raw) {
     network.on("stabilizationProgress", function (params) {
         document.getElementById('info').innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%\n';
         document.getElementById('info').innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
+        if(raw.warning != ''){
+            document.getElementById('info').innerHTML += `<br> <div class='yellow'> Warnings: (Check your map for potential error) <br> ${raw.warning} </div>`;
+        }
     });
     network.once("stabilizationIterationsDone", function () {
-        document.getElementById('info').innerText = `100% Loaded. \nAssets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`;
+        document.getElementById('info').innerText = `100% Loaded. \nAssets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length} `;
+        if(raw.warning != ''){
+            document.getElementById('info').innerHTML += `<br> <div class='yellow'> Warnings: (Check your map for potential error) <br> ${raw.warning} </div>`;
+        }
         var nl = document.getElementById('nodesList');
         for(var i=0;i<nodes.length;i++){
             var d = document.createElement('div');
@@ -368,6 +374,7 @@ function parseText(data){
     config = parseINIString(data);
     var nodes = [];
     var edges = [];
+    var warning = '';
     const id_pool = new Set();
     for(var item in config.Tags){
         var temp = config.Tags[item].split(',');
@@ -376,10 +383,14 @@ function parseText(data){
         obj.repeat = parseInt(temp[0]);
         obj.id = temp[2];
         if(id_pool.has(obj.id)){
-            console.log(`id: ${obj.id} duplicated, entry ignore`);
+            warning += `Trigger with ID ${obj.id} is referenced by more than one Tags. Tag (ID: ${obj.tag_id})'s Trigger is ignored.<br>`;
             continue;
         }else{
             id_pool.add(obj.id);
+        }
+        if(config.Triggers[obj.id] == undefined) {
+            warning += `Tag (ID: ${obj.tag_id}) points to a none existing Trigger ID: ${obj.id}. This Trigger is ignored.<br>`;
+            continue;
         }
         var arr = config.Triggers[obj.id].split(',');
         obj.label = arr[2];
@@ -398,13 +409,14 @@ function parseText(data){
         }
         nodes.push(obj);
         //console.log(obj);
+        
     }
     for(var item in config.VariableNames){
          var temp = config.VariableNames[item].split(',');
          nodes.push({id:item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
 
     }
-    result = {nodes, edges};
+    result = {nodes, edges, warning};
     return result;
 }
 

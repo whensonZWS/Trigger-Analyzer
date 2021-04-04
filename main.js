@@ -2,7 +2,7 @@
 var container = document.getElementById('mynetwork');
 var focusOptions = {scale: 1,offset: { x: 0, y: 0},animation: {duration: 1000,easingFunction: "easeInOutQuad"},};
 // simple init
-var network = new vis.Network(container, {nodes:[{id:0,label:"Load an MO map file",shape:"box"},{id:1,label:"to see the triggers!",shape:"box"}],edges:[{from:0,to:1,arrows:"to",length:250}]},{});
+var network = new vis.Network(container, {nodes:[{id:0,label:"Load a Red Alert 2 map file",shape:"box"},{id:1,label:"to see the triggers!",shape:"box"}],edges:[{from:0,to:1,arrows:"to",length:250}]},{});
 var nodesView = new vis.DataView(new vis.DataSet({}));
 // global options for filters
 var nodeFilterValue = '';
@@ -66,17 +66,18 @@ window.onload = function() {
             network.destroy();
             var info = document.getElementById('info');
             info.innerHTML = 'File detected, attempting to load...';
-            console.log(e.target.result)
             try{
                 raw = parseText(e.target.result);
                 try{
                     generateNetwork(raw);
                 }catch(error){
-                    alert('Unable to generate network graph!',error)
+                    alert('Unable to generate network graph!');
+                    console.log(error);
                     info.innerHTML = 'File loading failed.';
                 }
-            }catch{
+            }catch(error){
                 alert('Map file parse Error!');
+                console.log(error);
                 info.innerHTML = 'File loading failed.';
             }                     
         }
@@ -367,12 +368,19 @@ function parseText(data){
     config = parseINIString(data);
     var nodes = [];
     var edges = [];
+    const id_pool = new Set();
     for(var item in config.Tags){
         var temp = config.Tags[item].split(',');
         var obj = {};
         obj.tag_id = item;
         obj.repeat = parseInt(temp[0]);
         obj.id = temp[2];
+        if(id_pool.has(obj.id)){
+            console.log(`id: ${obj.id} duplicated, entry ignore`);
+            continue;
+        }else{
+            id_pool.add(obj.id);
+        }
         var arr = config.Triggers[obj.id].split(',');
         obj.label = arr[2];
         obj.house = arr[0];

@@ -120,14 +120,16 @@ function displayInfo(raw){
     // Triggers:
     if(raw.house){
         var d0 = document.createElement('div');
-        d0.innerHTML = `<div class='listItem'>Name:&nbsp;${raw.label}</div><div class='listItem'>ID:&nbsp;${raw.id}</div>`;
+        d0.innerHTML = `<div class='listItem'>Name:&nbsp;${raw.label}</div>
+            <div class='listItem'>ID:&nbsp;${raw.id}</div>`;
         var btn1 = document.createElement('button');
         btn1.innerHTML = 'Basic Info:';
         btn1.className = 'collapsible active';
         var d1 = document.createElement('div');
         d1.className = 'content';
         // basic info
-        d1.innerHTML =  `<div class='listItem'>House: ${raw.house}</div> <div class='listItem'>Repeat: ${raw.repeat}</div>`;
+        d1.innerHTML =  `<div class='listItem'>House: ${raw.house}</div> <div class='listItem'>Repeat: ${raw.repeat}</div>
+            <div class='listItem'>Tag ID:&nbsp;${raw.tag_id}</div>`;
         easy = raw.easy?'green':'red';
         normal = raw.normal?'green':'red';
         hard = raw.hard?'green':'red';
@@ -375,18 +377,18 @@ function parseText(data){
     var nodes = [];
     var edges = [];
     var warning = '';
-    const id_pool = new Set();
+    const id_pool = {};
     for(var item in config.Tags){
         var temp = config.Tags[item].split(',');
         var obj = {};
         obj.tag_id = item;
         obj.repeat = parseInt(temp[0]);
         obj.id = temp[2];
-        if(id_pool.has(obj.id)){
-            warning += `Trigger with ID ${obj.id} is referenced by more than one Tags. Tag (ID: ${obj.tag_id})'s Trigger is ignored.<br>`;
+        if(id_pool[obj.id]!=undefined){
+            nodes[id_pool[obj.id]].tag_id += `, ${obj.tag_id}`;
             continue;
         }else{
-            id_pool.add(obj.id);
+            id_pool[obj.id] = nodes.length;
         }
         if(config.Triggers[obj.id] == undefined) {
             warning += `Tag (ID: ${obj.tag_id}) points to a none existing Trigger ID: ${obj.id}. This Trigger is ignored.<br>`;

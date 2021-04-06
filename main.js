@@ -1,9 +1,43 @@
 // global variables
 var container = document.getElementById('mynetwork');
-var focusOptions = {scale: 1,offset: { x: 0, y: 0},animation: {duration: 1000,easingFunction: "easeInOutQuad"},};
+var focusOptions = {
+    scale: 1,
+    offset: {x: 0, y: 0},
+    animation: {duration: 1000,easingFunction: "easeInOutQuad"},
+};
+
+var networkData = {
+    nodes: [
+        {id:0,label:"Load a Red Alert 2 map file",shape:"box"},
+        {id:1,label:"to see the triggers!",shape:"box"}
+    ],
+    edges: [
+        {from:0,to:1,arrows:"to",length:250}
+    ]
+};
+
+var networkOptions = {
+    interaction: {
+        navigationButtons: true,
+        keyboard: true
+    },
+    physics: {
+        barnesHut: {
+            springConstant: 0.05,
+            centralGravity: 0.4
+        }
+    },
+    edges:{
+        width: 4,
+        selectionWidth: w => w*2,
+        length: 100
+    }
+};
+
 // simple init
-var network = new vis.Network(container, {nodes:[{id:0,label:"Load a Red Alert 2 map file",shape:"box"},{id:1,label:"to see the triggers!",shape:"box"}],edges:[{from:0,to:1,arrows:"to",length:250}]},{});
-var nodesView = new vis.DataView(new vis.DataSet({}));
+//var nodesView = new vis.DataView(networkData);
+var network = new vis.Network(container, networkData, networkOptions);
+
 // global options for filters
 var nodeFilterValue = '';
 const nodesFilter = (node) => {
@@ -24,6 +58,7 @@ nfs.addEventListener("change", (e) => {
     nodeFilterValue = e.target.value;
     nodesView.refresh();
 });
+
 // global physics
 var pc = document.getElementById("physicsCheck");
 pc.addEventListener("change", (e) =>{
@@ -33,7 +68,9 @@ var sb = document.getElementById('stopBtn');
 sb.addEventListener("click",(e)=>{
     network.stopSimulation();
 });
-//async load!!!!!
+
+
+//async load final alert events/actions data
 var fadata = new XMLHttpRequest();
 
 fadata.onreadystatechange = function () {
@@ -83,9 +120,6 @@ window.onload = function() {
         }
         reader.readAsText(file, 'UTF-8');
         reader.onerror = error=>console.log(error);
-        //} else {
-        //	alert(`Uploaded file has unexpected type: \n\n${file.type}!\n\nChoose a plain text instead.`);
-        //}
 	});
 }
 
@@ -207,29 +241,10 @@ function generateNetwork(raw) {
         nodes: nodesView,
         edges: edges
     };  
-    var options = {
-        interaction: {
-            navigationButtons: true,
-            keyboard: true
-        },
-        physics:{
-            barnesHut: {
-                springLength: 120,
-                springConstant: 0.05,
-                centralGravity: 0.4
-                
-            },
-            
-        },
-        layout: {
-            improvedLayout: false,
-            
-        }
-        
-    }
+    
     
 
-    network = new vis.Network(container, data, options);            
+    network = new vis.Network(container, data, networkOptions);            
     
     network.on("click", function (params) {
         if(params.nodes.length > 0){
@@ -309,7 +324,7 @@ function parseINIString(data){
     return value;
 }
 
-function parseEvents(str,parent_id,edges){
+function parseEvents(str,parent_id,edges,nodes){
     var arr = str.split(',');
     var events = [];
     for(var i=1;i<arr.length;i+=3){
@@ -323,11 +338,20 @@ function parseEvents(str,parent_id,edges){
             obj.p = [arr[i+2]];
         }
         switch(obj.type){
+            // local variables
             case 36:
-                edges.push({from: obj.p[0], to: parent_id, arrows: "to", color: "#00FF00", width:2, dashes: true});
+                edges.push({from: 'L' + obj.p[0], to: parent_id, arrows: "to", color: "#00FF00", dashes: true});
                 break;
             case 37:
-                edges.push({from: obj.p[0], to: parent_id, arrows: "to", color: "#FF0000", width:2, dashes: true});
+                edges.push({from: 'L' + obj.p[0], to: parent_id, arrows: "to", color: "#FF0000", dashes: true});
+                break;
+            case 27:
+                edges.push({from: 'G' + obj.p[0], to: parent_id, arrows: "to", color: "#00FF00", dashes: true});
+                addGV(obj.p[0],nodes);
+                break;
+            case 28:
+                edges.push({from: 'G' + obj.p[0], to: parent_id, arrows: "to", color: "#FF0000", dashes: true});
+                addGV(obj.p[0],nodes);
                 break;
         }
         events.push(obj);
@@ -335,7 +359,23 @@ function parseEvents(str,parent_id,edges){
     return events;
 }
 
-function parseActions(str,parent_id,edges){
+// RA trigger global variable helper function
+function addGV(num,nodes){
+    var flag = true;
+    for(var item in nodes){
+        if('G' + num == item.id){
+            flag = false;
+            break;
+        }
+    }
+    if(flag){
+        nodes.push({id:'G'+num,label:`Global Variable ${num}`,shape:"dot",mass:4});
+    }
+}
+
+
+
+function parseActions(str,parent_id,edges,nodes){
     var arr = str.split(',');
     var actions = [];
     const n = arr[0];
@@ -349,22 +389,30 @@ function parseActions(str,parent_id,edges){
         actions.push(obj);
         switch(obj.type){
             case 12:
-                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FFFF00", width:2});
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FFFF00"});
                 break;
             case 22:
-                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#0000FF", width:2});
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#0000FF"});
                 break;
             case 53:
-                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#00FF00", width:2});
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#00FF00"});
                 break;
             case 54:
-                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000", width:2});
+                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000"});
                 break;
             case 56:
-                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#00FF00", width:2, dashes: true});
+                edges.push({from: parent_id, to: 'L' + obj.p[1], arrows: "to", color: "#00FF00", dashes: true});
                 break;
             case 57:
-                edges.push({from: parent_id, to: obj.p[1], arrows: "to", color: "#FF0000", width:2, dashes: true});
+                edges.push({from: parent_id, to: 'L' + obj.p[1], arrows: "to", color: "#FF0000", dashes: true});
+                break;
+            case 28:
+                edges.push({from: parent_id, to: 'G' + obj.p[1], arrows: "to", color: "#00FF00", dashes: true});
+                addGV(obj.p[1],nodes);
+                break;
+            case 29:
+                edges.push({from: parent_id, to: 'G' + obj.p[1], arrows: "to", color: "#FF0000", dashes: true});
+                addGV(obj.p[1],nodes);
                 break;
         }
         if(actions.length == n) break;
@@ -398,12 +446,15 @@ function parseText(data){
         obj.label = arr[2];
         obj.house = arr[0];
         obj.link = arr[1];
+        if(obj.link.trim() != '<none>'){
+            edges.push({from: obj.id, to: obj.link, arrows: "to", color: '#FFA500'});
+        }
         obj.easy = parseInt(arr[6]);
         obj.normal = parseInt(arr[5]);
         obj.hard = parseInt(arr[4]);
         obj.disabled = parseInt(arr[3]);
-        obj.events = parseEvents(config.Events[obj.id],obj.id,edges);
-        obj.actions = parseActions(config.Actions[obj.id],obj.id,edges);
+        obj.events = parseEvents(config.Events[obj.id],obj.id,edges,nodes);
+        obj.actions = parseActions(config.Actions[obj.id],obj.id,edges,nodes);
         obj.shape = "box";
         obj.mass = 2;
         if(obj.disabled){
@@ -415,7 +466,7 @@ function parseText(data){
     }
     for(var item in config.VariableNames){
          var temp = config.VariableNames[item].split(',');
-         nodes.push({id:item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
+         nodes.push({id:'L'+item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
 
     }
     result = {nodes, edges, warning};

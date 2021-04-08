@@ -8,8 +8,8 @@ var focusOptions = {
 
 var networkData = {
     nodes: [
-        {id:0,label:"Load a Red Alert 2 map file",shape:"box"},
-        {id:1,label:"to see the triggers!",shape:"box"}
+        {id:0,  label:"Load a Red Alert 2 map file",  shape:"box"},
+        {id:1,  label:"to see the triggers!",         shape:"box"}
     ],
     edges: [
         {from:0,to:1,arrows:"to",length:250}
@@ -67,6 +67,24 @@ pc.addEventListener("change", (e) =>{
 var sb = document.getElementById('stopBtn');
 sb.addEventListener("click",(e)=>{
     network.stopSimulation();
+});
+var tree = document.getElementById('treeLayout');
+tree.addEventListener('change',(e)=>{
+    network.setOptions({
+        layout:{
+            hierarchical:{
+                enabled: e.target.checked,
+                direction: 'LR'
+            }
+        },
+        physics:{
+            hierarchicalRepulsion:{
+                avoidOverlap: 1
+            }
+        }
+    });
+    network.fit();
+
 });
 
 

@@ -481,11 +481,11 @@ function parseText(data){
                     break;
                 case 28:
                     edges.push({from: parent_id, to: 'G' + obj.p[1], arrows: "to", color: "#00FF00", dashes: true});
-                    addGV(obj.p[1],nodes);
+                    addGV(obj.p[1]);
                     break;
                 case 29:
                     edges.push({from: parent_id, to: 'G' + obj.p[1], arrows: "to", color: "#FF0000", dashes: true});
-                    addGV(obj.p[1],nodes);
+                    addGV(obj.p[1]);
                     break;
             }
             // just in case there are some extra parameters left behind, break the loop before those can be parse as a different actions
@@ -521,12 +521,12 @@ function parseText(data){
                 // global variable: clear
                 case 27:
                     edges.push({from: 'G' + obj.p[0], to: parent_id, arrows: "to", color: "#00FF00", dashes: true});
-                    addGV(obj.p[0],nodes);
+                    addGV(obj.p[0]);
                     break;
                 // global variable: clear
                 case 28:
                     edges.push({from: 'G' + obj.p[0], to: parent_id, arrows: "to", color: "#FF0000", dashes: true});
-                    addGV(obj.p[0],nodes);
+                    addGV(obj.p[0]);
                     break;
             }
             events.push(obj);
@@ -537,8 +537,8 @@ function parseText(data){
     // global variable helper function
     function addGV(num){
         var flag = true;
-        for(var item in nodes){
-            if('G' + num == item.id){
+        for(var i=0;i<nodes.length;i++){
+            if(('G' + num) == nodes[i].id){
                 flag = false;
                 break;
             }

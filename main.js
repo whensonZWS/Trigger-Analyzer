@@ -29,7 +29,7 @@ var networkOptions = {
         }
     },
     edges:{
-        width: 4,
+        width: 3,
         selectionWidth: w => w*2,
         length: 100
     }
@@ -174,7 +174,8 @@ function displayInfo(raw){
     // Triggers:
     if(raw.house){
         var d0 = document.createElement('div');
-        d0.innerHTML = `<div class='listItem'>Name:&nbsp;${raw.label}</div>
+        d0.innerHTML = 
+            `<div class='listItem'>Name:&nbsp;${raw.label}</div>
             <div class='listItem'>ID:&nbsp;${raw.id}</div>`;
         var btn1 = document.createElement('button');
         btn1.innerHTML = 'Basic Info:';
@@ -183,7 +184,9 @@ function displayInfo(raw){
         d1.className = 'content';
         // basic info
         const tags = raw.tags.join(',&nbsp')
-        d1.innerHTML =  `<div class='listItem'>House: ${raw.house}</div> <div class='listItem'>Repeat: ${raw.repeat}</div>
+        d1.innerHTML =  `
+            <div class='listItem'>House: ${raw.house}</div> 
+            <div class='listItem'>Repeat: ${raw.repeat}</div>
             <div class='listItem'>Tags:&nbsp;${tags} </div>`
         easy = raw.easy?'green':'red';
         normal = raw.normal?'green':'red';
@@ -203,6 +206,7 @@ function displayInfo(raw){
             var d = document.createElement('div');
             d.className = 'listItem';
             d.innerHTML += `Event ${i}: ${events[t].name}`;
+            // check if the events type has more than 2 variables in
             if(events[t].p[0] > 0){
                 d.innerHTML += ` ${raw.events[i].p[0]} ${raw.events[i].p[1]}`;
             }else{
@@ -239,7 +243,11 @@ function displayInfo(raw){
         info.appendChild(d3);
         bind_coll();
     }else{
-        info.innerHTML = `Variable <br> Name:&nbsp;${raw.label}<br>ID:&nbsp;${raw.id}<br>Initial Value:&nbsp;${raw.initValue}`;
+        info.innerHTML = 
+            `Variable <br> 
+            Name:&nbsp;${raw.label}<br>
+            ID:&nbsp;${raw.id}<br>
+            Initial Value:&nbsp;${raw.initValue}`;
     
     }
 }
@@ -281,18 +289,21 @@ function generateNetwork(raw) {
         }
     });
 
-
+    var info = document.getElementById('info')
     network.on("stabilizationProgress", function (params) {
-        document.getElementById('info').innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%\n';
-        document.getElementById('info').innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
-        if(raw.warning != ''){
-            document.getElementById('info').innerHTML += `<br> <div class='yellow'> Warnings: (Check your map for potential error) <br> ${raw.warning} </div>`;
+        info.innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%\n';
+        info.innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
+        if(raw.warning.length > 0){
+            info.innerHTML += `<br> <div class='yellow'> Warnings: (Check your map for potential error)</div>
+                <div> ${parseWarning(raw.warning)} </div>`;
         }
     });
     network.once("stabilizationIterationsDone", function () {
-        document.getElementById('info').innerText = `100% Loaded. \nAssets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length} `;
-        if(raw.warning != ''){
-            document.getElementById('info').innerHTML += `<br> <div class='yellow'> Warnings: (Check your map for potential error) <br> ${raw.warning} </div>`;
+        info.innerText = `100% Loaded. \nAssets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length} `;
+        if(raw.warning.length>0){
+            info.innerHTML += `
+                <br> <div class='yellow'> Warnings: (Check your map for potential error) </div>
+                <div> ${parseWarning(raw.warning)} </div>`;
         }
         var nl = document.getElementById('nodesList');
         for(var i=0;i<nodes.length;i++){
@@ -312,9 +323,18 @@ function generateNetwork(raw) {
 
 };
 
+/**
+ * @param {[]} data, the arrays of warning message
+ * @return {String} an HTML string representing the warning message
+ * input should be an array consist of warning messange,
+ * warning information can get complex in the future, where each array element contains type of error and the detailed information for each error
+ * 
+*/ 
+function parseWarning(data){
+    return data.join('<br>')
+}
 
-
-
+// code that I shamelessly copy from stack overflow
 function parseINIString(data){
     var regex = {
         section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
@@ -346,13 +366,18 @@ function parseINIString(data){
 }
 
 
-
+/**
+ * 
+ * @param {String} data, the INI text string to be parsed 
+ * @returns {object} an object containing 3 arrays: nodes, edges and warnings
+ */
 function parseText(data){
     config = parseINIString(data);
 
     var nodes = [];
     var edges = [];
-    var warning = '';
+    var warning = [];
+    var unique_id = new Set();
 
     /**
      * Relationship between Triggers and Tags is not well understood
@@ -380,7 +405,7 @@ function parseText(data){
         const arr = config.Tags[item].split(',');
         const rep = findRep(arr[2]);
         if(triggerRef[rep] == undefined){
-            warning += 'None existing Triggers!!!!! <br>'
+            warning.push(`Tag ${item} refer to a none existing trigger!`);
         }else{
             triggerRef[rep].push(item);
         }
@@ -390,23 +415,20 @@ function parseText(data){
     for(var item in config.Triggers){
         const arr = config.Triggers[item].split(',');
         var obj = {};
-        
 
         // trigger property
         obj.id = item;
         obj.label = arr[2];
-        obj.house = arr[0];
-        obj.easy = parseInt(arr[6]);
+        obj.house = arr[0];             
+        obj.easy = parseInt(arr[4]);
         obj.normal = parseInt(arr[5]);
-        obj.hard = parseInt(arr[4]);
+        obj.hard = parseInt(arr[6]);
         obj.disabled = parseInt(arr[3]);
-        obj.events = parseEvents(config.Events[obj.id],obj.id);
-        obj.actions = parseActions(config.Actions[obj.id],obj.id);
 
         // check if the trigger has any associated tags
         const rep = findRep(item);
         if(triggerRef[rep].length == 0){
-            warning += 'unreference trigger <br>'
+            warning.push(`Trigger ${item} doesn't have any tags!`)
             continue;
         }
         // associated the repeating type with the first tag
@@ -417,13 +439,31 @@ function parseText(data){
             edges.push({from: obj.id, to: obj.link, arrows: "to;from", color: '#FFA500'});
         }
 
+        // parse objects and events
+        try{
+            obj.events = parseEvents(config.Events[obj.id],obj.id);
+            obj.actions = parseActions(config.Actions[obj.id],obj.id);
+        }catch(error){
+            warning.push(`Trigger ${item} has error in its events or actions`);
+            console.log(error);
+        }
+        
+
+        
+
         // customized nodes property
         obj.shape = "box";
         obj.mass = 2;
         if(obj.disabled){
             obj.color = {border:'red',highlight:{border:'red'}};
         }
-        nodes.push(obj);       
+        if(unique_id.has(item)){
+            warning.push(`ID ${item} duplicated!`);
+        }else{
+            nodes.push(obj);
+            unique_id.add(obj.id)
+        }
+               
 
     }
 
@@ -536,15 +576,9 @@ function parseText(data){
 
     // global variable helper function
     function addGV(num){
-        var flag = true;
-        for(var i=0;i<nodes.length;i++){
-            if(('G' + num) == nodes[i].id){
-                flag = false;
-                break;
-            }
-        }
-        if(flag){
+        if(!unique_id.has('G'+num)){
             nodes.push({id:'G'+num,label:`Global Variable ${num}`,shape:"dot",mass:4});
+            unique_id.add('G'+num)
         }
     }
 }
@@ -565,7 +599,11 @@ function bind_coll(){
         
     }
 }
-
+/**
+ * 
+ * @param {String} str, waypoint represented in alphabet 
+ * @returns {Number}
+ */
 function wp(str){
     const alp = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var r = 0;

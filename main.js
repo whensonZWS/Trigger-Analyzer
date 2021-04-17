@@ -17,48 +17,97 @@ var networkData = {
     ]
 };
 
-var networkOptions = {
+var networkOptionsDefault = {
     interaction: {
         navigationButtons: true,
         keyboard: true
     },
     physics: {
+        enabled: true,
         barnesHut: {
             springConstant: 0.05,
             centralGravity: 0.4
+        },
+    },
+    layout:{
+        hierarchical:{
+            enabled: false
         }
     },
     edges:{
         width: 3,
         selectionWidth: w => w*2,
-        length: 100
+        length: 150
+    },
+    nodes:{
+        widthConstraint:{maximum: 200}
     }
 };
+
+var networkOptionsTree = {
+    layout:{
+        hierarchical:{
+            enabled: true,
+            direction: 'LR',
+            sortMethod: 'hubsize',  // hubsize, directed
+            // directed is the natural choice for hierachy layout, however, looping confuse the graph algorithm and produce ugly graph
+            // using hubsize by default, but directed is not out of the question yet in future version
+        }
+    },
+    physics:{
+        enabled: true,
+        hierarchicalRepulsion: {
+            avoidOverlap: 0.5
+        }
+    }
+}
 
 // simple init
 //var nodesView = new vis.DataView(networkData);
-var network = new vis.Network(container, networkData, networkOptions);
+var network = new vis.Network(container, networkData, networkOptionsDefault);
 
 // global options for filters
-var nodeFilterValue = '';
-const nodesFilter = (node) => {
-    if(nodeFilterValue == ''){
-        return true;
-    }
-    switch(nodeFilterValue){
-        case 'triggers':
-            return node.house != undefined;
-        case 'variables':
-            return node.house == undefined;
-        default:
-            return true;
-    }
+var nodeFilterOptions = {
+    triggers: true,
+    variables: true,
+    easy: true,
+    normal: true,
+    hard: true
 };
+
 var nfs = document.getElementById("nodeFilterSelect");
 nfs.addEventListener("change", (e) => {
-    nodeFilterValue = e.target.value;
+    switch(e.target.value){
+        case "all":
+            nodeFilterOptions.triggers = true;
+            nodeFilterOptions.variables = true;
+        break;
+        case "triggers":
+            nodeFilterOptions.triggers = true;
+            nodeFilterOptions.variables = false;
+        break;
+        
+        case "variables":
+            nodeFilterOptions.triggers = false;
+            nodeFilterOptions.variables = true;
+        break;
+    }
     nodesView.refresh();
 });
+
+// for easy normal hard check box
+document.getElementById('easyFilter').onchange = quickFilter('easy');
+document.getElementById('normalFilter').onchange = quickFilter('normal');
+document.getElementById('hardFilter').onchange = quickFilter('hard');
+function quickFilter(str){
+    return function (e){
+        nodeFilterOptions[str] = e.target.checked;
+        nodesView.refresh();
+    };
+}
+
+
+
 
 // global physics
 var pc = document.getElementById("physicsCheck");
@@ -71,20 +120,21 @@ sb.addEventListener("click",(e)=>{
 });
 var tree = document.getElementById('treeLayout');
 tree.addEventListener('change',(e)=>{
-    network.setOptions({
+    //document.getElementById('physicsCheck').checked = true;
+    /*network.setOptions({
         layout:{
             hierarchical:{
-                enabled:e.target.checked,
-                direction: 'UD',
-                sortMethod: 'hubsize',  // hubsize, directed
-            }
-        },
-        physics:{
-            hierarchicalRepulsion: {
-                avoidOverlap: 0.5
+                enabled: e.target.checked,
             }
         }
-    });
+    });*/
+    if(e.target.checked){
+        network.setOptions(networkOptionsTree);
+    }else{
+        network.setOptions(networkOptionsDefault)
+    }
+    document.getElementById('physicsCheck').checked = true;
+
     network.fit();
 
 });
@@ -139,6 +189,7 @@ window.onload = function() {
             }                     
         }
         reader.readAsText(file, 'UTF-8');
+        
         reader.onerror = error=>console.log(error);
 	});
 }
@@ -171,12 +222,14 @@ function displayInfo(raw){
     while(info.hasChildNodes()){
         info.removeChild(info.childNodes[0]);
     }
+    if(raw == null) return;
     // Triggers:
     if(raw.house){
         var d0 = document.createElement('div');
-        d0.innerHTML = 
-            `<div class='listItem'>Name:&nbsp;${raw.label}</div>
-            <div class='listItem'>ID:&nbsp;${raw.id}</div>`;
+        d0.innerHTML = `
+            <div class='listItem'>Name:&nbsp;${raw.label}</div>
+            <div class='listItem'>ID:&nbsp;${raw.id}</div>
+            `;
         var btn1 = document.createElement('button');
         btn1.innerHTML = 'Basic Info:';
         btn1.className = 'collapsible active';
@@ -206,7 +259,8 @@ function displayInfo(raw){
             var d = document.createElement('div');
             d.className = 'listItem';
             d.innerHTML += `Event ${i}: ${events[t].name}`;
-            // check if the events type has more than 2 variables in
+            d.title = `${t}: ${events[t].description}`;
+            // check if the events type has more than 2 variables in its parameter
             if(events[t].p[0] > 0){
                 d.innerHTML += ` ${raw.events[i].p[0]} ${raw.events[i].p[1]}`;
             }else{
@@ -226,6 +280,7 @@ function displayInfo(raw){
             var d = document.createElement('div');
             d.innerHTML += `Action ${i}: ${actions[t].name}`;
             d.className = 'listItem';
+            d.title = `${t}: ${actions[t].description}`;
             for(j=0;j<7;j++){
                 if(actions[t].p[j]>0){
                     if(j!=6) d.innerHTML += ` ${raw.actions[i].p[j]}`;
@@ -243,8 +298,8 @@ function displayInfo(raw){
         info.appendChild(d3);
         bind_coll();
     }else{
-        info.innerHTML = 
-            `Variable <br> 
+        info.innerHTML = `
+            Variable <br> 
             Name:&nbsp;${raw.label}<br>
             ID:&nbsp;${raw.id}<br>
             Initial Value:&nbsp;${raw.initValue}`;
@@ -260,26 +315,57 @@ function generateNetwork(raw) {
     const nodes_index = {};
     var L = document.getElementById('nodesList');
     L.innerHTML = '';
-    for(var i=0;i<nodes.length;i++){
-        nodes_index[nodes[i].id] = i;
-    }
     //var nodes = new vis.DataSet(raw.nodes);
     //var edges = new vis.DataSet(raw.edges);
-    nodesView = new vis.DataView(new vis.DataSet(nodes),{filter:nodesFilter});
+    nodesData = new vis.DataSet(nodes);
+
+    const nodesFilter = (node) => {
+        /**
+         * filter flow:
+         * triggers
+         *     1 check if trigger is in filter, true -> step 3, false -> step 2
+         *     2 check if it's a neighbour of variable, true -> step 3, false -> return false
+         *     3 check if any the the trigger difficulty match the filter option, true -> return true, false -> return false
+         * variables
+         *     just check if variable is in filter
+         */
+        // triggers
+        if(node.house != undefined){
+            if(!nodeFilterOptions.triggers){
+                var flag = true;
+                for(var item of node.neighbour){
+                    if(nodesData.get(item).house == undefined){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag) return false;
+            }
+            return (node.easy && nodeFilterOptions.easy) || (node.normal && nodeFilterOptions.normal) || (node.hard && nodeFilterOptions.hard);
+        }else{
+            return nodeFilterOptions.variables;
+
+        }
+        
+    };
+    nodesView = new vis.DataView(nodesData,{filter:nodesFilter});
+   
     var data = {
         nodes: nodesView,
         edges: edges
     };  
     
-    
+    document.getElementById('physicsCheck').checked = true;
+    document.getElementById('treeLayout').checked = false;
 
-    network = new vis.Network(container, data, networkOptions);            
+    network = new vis.Network(container, data, networkOptionsDefault);            
     
     network.on("click", function (params) {
         if(params.nodes.length > 0){
             const n_id = params.nodes[0];
-            //document.getElementById('info').innerText = JSON.stringify(nodes[nodes_index[n_id]],null,4);
-            displayInfo(nodes[nodes_index[n_id]]);
+            displayInfo(nodesView.get(n_id));
+        }else if(params.nodes.length == 0){
+            displayInfo(null)
         }
     });
 
@@ -289,22 +375,28 @@ function generateNetwork(raw) {
         }
     });
 
+    // loading progress and info display
     var info = document.getElementById('info')
     network.on("stabilizationProgress", function (params) {
         info.innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%\n';
         info.innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
         if(raw.warning.length > 0){
-            info.innerHTML += `<br> <div class='yellow'> Warnings: (Check your map for potential error)</div>
+            info.innerHTML += `
+                <br> <div class='yellow'> Warnings: (Check your map for potential error)</div>
                 <div> ${parseWarning(raw.warning)} </div>`;
         }
     });
+
     network.once("stabilizationIterationsDone", function () {
+        
+        // info box
         info.innerText = `100% Loaded. \nAssets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length} `;
         if(raw.warning.length>0){
             info.innerHTML += `
                 <br> <div class='yellow'> Warnings: (Check your map for potential error) </div>
                 <div> ${parseWarning(raw.warning)} </div>`;
         }
+        // populate node list
         var nl = document.getElementById('nodesList');
         for(var i=0;i<nodes.length;i++){
             var d = document.createElement('div');
@@ -313,14 +405,18 @@ function generateNetwork(raw) {
             d.inner_id = nodes[i].id;
             d.innerHTML = nodes[i].label;
             d.addEventListener("click",function (e){
-                network.focus(this.inner_id,focusOptions);
-                network.setSelection({nodes:[this.inner_id]});
-                displayInfo(nodes[nodes_index[this.inner_id]]);
+                displayInfo(nodesData.get(this.inner_id));
+                // only focus and select when the node is in current view
+                if(nodesFilter(nodesData.get(this.inner_id))){
+                    network.focus(this.inner_id,focusOptions);
+                    network.setSelection({nodes:[this.inner_id]});
+                }
+                
             });
             nl.appendChild(d); 
         }
     });
-
+    
 };
 
 /**
@@ -373,8 +469,8 @@ function parseINIString(data){
  */
 function parseText(data){
     config = parseINIString(data);
-
-    var nodes = [];
+    // nodes are treated as a map for easy access, will be convert to array during output
+    var nodes = new Map();
     var edges = [];
     var warning = [];
     var unique_id = new Set();
@@ -424,7 +520,7 @@ function parseText(data){
         obj.normal = parseInt(arr[5]);
         obj.hard = parseInt(arr[6]);
         obj.disabled = parseInt(arr[3]);
-
+        obj.neighbour = new Set();
         // check if the trigger has any associated tags
         const rep = findRep(item);
         if(triggerRef[rep].length == 0){
@@ -457,10 +553,12 @@ function parseText(data){
         if(obj.disabled){
             obj.color = {border:'red',highlight:{border:'red'}};
         }
+
+
         if(unique_id.has(item)){
             warning.push(`ID ${item} duplicated!`);
         }else{
-            nodes.push(obj);
+            nodes.set(obj.id,obj);
             unique_id.add(obj.id)
         }
                
@@ -469,8 +567,18 @@ function parseText(data){
 
     for(var item in config.VariableNames){
         var temp = config.VariableNames[item].split(',');
-        nodes.push({id:'L'+item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4});
+        nodes.set('L'+item, {id:'L'+item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4,neighbour:new Set()});
+    }
+   // pre-processing: storing neighbour in nodes
+    for(var i=0;i<edges.length;i++){
+        try{
+            nodes.get(edges[i].from).neighbour.add(edges[i].to);
+            nodes.get(edges[i].to).neighbour.add(edges[i].from);
+        }catch{
+            continue;
+        }
    }
+   nodes = Array.from(nodes.values());
    result = {nodes, edges, warning};
    return result;
     
@@ -577,7 +685,7 @@ function parseText(data){
     // global variable helper function
     function addGV(num){
         if(!unique_id.has('G'+num)){
-            nodes.push({id:'G'+num,label:`Global Variable ${num}`,shape:"dot",mass:4});
+            nodes.set('G'+num,{id:'G'+num,label:`Global Variable ${num}`,shape:"dot",mass:4,neighbour:new Set()});
             unique_id.add('G'+num)
         }
     }

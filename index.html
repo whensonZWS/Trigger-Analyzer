@@ -3,38 +3,35 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <style type="text/css">
+        
         #mynetwork {
-            position: absolute;
-            top: 5%;
+            float:left;
             width: 68%;
-            height: 92%;
+            height: 100%;
             border: 1px solid lightgray;
         }
         #info {
-            position: absolute;
-            top: 5%;
-            left: 69%;
-            width: 30%;
-            height: 42%;
-            border: 1px solid lightgrey;
-            overflow: auto;
-            font-family:Consolas, monospace;
-        }
-        #nodesList {
-            position: absolute;
-            top: 52%;
-            left: 69%;
+            float:left;
+            margin: 1px 0px 0px 5px;
             width: 30%;
             height: 45%;
             border: 1px solid lightgrey;
             overflow: auto;
             font-family:Consolas, monospace;
         }
+        #nodesList {
+            float:left;
+            margin: 1px 0px 0px 5px;
+            width: 30%;
+            height: 49%;
+            border: 1px solid lightgrey;
+            overflow: auto;
+            font-family:Consolas, monospace;
+        }
         
         #searchBox {
-            position: absolute;
-            top: 47%;
-            left: 69%;
+            margin: 1px 0px 0px 5px;
+            float: left;
             width: 30%;
             height: 5%;
             border: 1px solid lightgrey;
@@ -42,9 +39,10 @@
         }
 
         .listItem {
+            
             padding: 2px 0px 2px 5px;
             font-family:Consolas, monospace;
-            user-select: none;
+
         }
         .listItem:hover{
             background-color: lightgrey;
@@ -83,29 +81,48 @@
             overflow: hidden;
             transition: max-height 0.2s ease-out;
         }
+        .main {
+            width: 99vw;
+            height: 95vh;
+        }
+        
 
     </style>
 </head>
 <body>
-<input type="file" id="fileInput" accept=".map,.yrm,.mpr" autocomplete="off">
-<label>
-    Filter:
-    <select id="nodeFilterSelect" autocomplete="off">
-        <option value> All </option>
-        <option value="triggers"> Triggers </option>
-        <option value="variables"> Variables </option>
-    </select>
-</label>
-<input type="checkbox" id="physicsCheck" name="physics" value="physics" checked autocomplete="off">Physics Enabled
+<div>
+    <input type="file" id="fileInput" accept=".map,.yrm,.mpr" autocomplete="off">
 
-<button id='stopBtn'> Stop!</button>
 
-<input type="checkbox" id="treeLayout" name="tree" value="tree" autocomplete="off" title="Caution! Complex network can crash your browser tab">Tree Layout
+    <label>
+        Filter:
+        <select id="nodeFilterSelect" autocomplete="off">
+            <option value="all"> All </option>
+            <option value="triggers"> Triggers </option>
+            <option value="variables"> Variables </option>
+        </select>
+    </label>
 
-<div id="info">Welcome to the trigger analyzer. <br> <br> To start, choose a Red Alert 2 map file.</div>
-<div id="nodesList">List of triggers and Variables will be listed here.</div>
-<input type="text" id='searchBox' placeholder="Search By Trigger Name or ID" onkeyup="searchFilterFunc()" autocomplete="off">
+   
+    <input type="checkbox" id="easyFilter" checked autocomplete="off" > Easy
+    <input type="checkbox" id="normalFilter" checked autocomplete="off"> Normal
+    <input type="checkbox" id="hardFilter" checked autocomplete="off"> Hard
+
+
+
+    <span style="margin-left:20px;">Physics:</span>    
+    
+    <input type="checkbox" id="physicsCheck" name="physics" value="physics" checked autocomplete="off">Physics Enabled
+    <button id='stopBtn'> Stop!</button>
+    <input type="checkbox" id="treeLayout" name="tree" value="tree" autocomplete="off" title="Caution! Complex network can crash your browser tab">Tree Layout
+
+</div>
+<div class="main">
 <div id="mynetwork"></div>
+<div id="info">Welcome to the trigger analyzer. <br> <br> To start, choose a Red Alert 2 map file.</div>
+<input type="text" id='searchBox' placeholder="Search By Trigger Name or ID" oninput="searchFilterFunc()" autocomplete="off">
+<div id="nodesList">List of triggers and Variables will be listed here.</div>
+</div>
 
 <script src='main.js'></script>
 </body>

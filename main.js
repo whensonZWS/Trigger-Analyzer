@@ -9,11 +9,15 @@ var focusOptions = {
 
 var networkData = {
     nodes: [
-        {id:0,  label:"Load a Red Alert 2 map file",  shape:"box"},
-        {id:1,  label:"to see the triggers!",         shape:"box"}
+        {id:0, label: "Load a Red Alert 2 map file",    shape: "box"},
+        {id:1, label: "to see the triggers!",           shape: "box"},
+        {id:2, label: "Drag and drop also works works!",shape: "box"}
     ],
     edges: [
-        {from:0,to:1,arrows:"to",length:250}
+        {from: 0,to: 1,arrows: "to", length: 250, color: '#00FF00'},
+        {from: 2,to: 1,arrows: "to", length: 250, color: '#00FF00'},
+        {from: 0,to: 2,arrows: "to;from", length: 250, color: '#FFA500'}
+
     ]
 };
 
@@ -120,14 +124,7 @@ sb.addEventListener("click",(e)=>{
 });
 var tree = document.getElementById('treeLayout');
 tree.addEventListener('change',(e)=>{
-    //document.getElementById('physicsCheck').checked = true;
-    /*network.setOptions({
-        layout:{
-            hierarchical:{
-                enabled: e.target.checked,
-            }
-        }
-    });*/
+
     if(e.target.checked){
         network.setOptions(networkOptionsTree);
     }else{
@@ -158,6 +155,8 @@ var actions = [];
 
 
 
+
+
 //on load initialization
 window.onload = function() {
     document.getElementById('searchBox').value = '';
@@ -165,8 +164,7 @@ window.onload = function() {
 
     fileInput.addEventListener('change', function(e) {
         var file = fileInput.files[0];
-        //var textType = /text.*/;
-        //if (file.type.match(textType)) {
+
         var reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('searchBox').value = '';
@@ -186,12 +184,27 @@ window.onload = function() {
                 alert('Map file parse Error!');
                 console.log(error);
                 info.innerHTML = 'File loading failed.';
-            }                     
+            } 
         }
         reader.readAsText(file, 'UTF-8');
         
         reader.onerror = error=>console.log(error);
 	});
+}
+
+
+ 
+container.ondragover = function(e){
+    e.preventDefault();
+};
+container.ondrop = function(e) {
+    
+    var fileInput = document.getElementById('fileInput');
+    fileInput.files = e.dataTransfer.files;
+    const event = new Event('change');
+    fileInput.dispatchEvent(event);
+    e.preventDefault();
+    
 }
 
 
@@ -225,35 +238,42 @@ function displayInfo(raw){
     if(raw == null) return;
     // Triggers:
     if(raw.house){
+        // ID and Label
         var d0 = document.createElement('div');
         d0.innerHTML = `
             <div class='listItem'>Name:&nbsp;${raw.label}</div>
             <div class='listItem'>ID:&nbsp;${raw.id}</div>
             `;
-        var btn1 = document.createElement('button');
-        btn1.innerHTML = 'Basic Info:';
-        btn1.className = 'collapsible active';
-        var d1 = document.createElement('div');
-        d1.className = 'content';
-        // basic info
+        
+        var d1 = document.createElement('details');
+        var s1 = document.createElement('summary');
+        s1.innerHTML = 'Basic Info';
+        d1.appendChild(s1);
+        d1.open = true;
         const tags = raw.tags.join(',&nbsp')
-        d1.innerHTML =  `
+        d1.innerHTML +=  `
             <div class='listItem'>House: ${raw.house}</div> 
             <div class='listItem'>Repeat: ${raw.repeat}</div>
-            <div class='listItem'>Tags:&nbsp;${tags} </div>`
+            <div class='listItem'>Tags: ${tags} </div>`
+        if(raw.link.trim() != '<none>'){
+            console.log(raw.link);
+            d1.innerHTML +=  `
+            <div class='listItem'>Link Trigger: ${raw.link}</div>`
+        }
         easy = raw.easy?'green':'red';
         normal = raw.normal?'green':'red';
         hard = raw.hard?'green':'red';
         disabled = raw.disabled?'red':'green';
         d1.innerHTML += `<div class='listItem'>Difficulty:&nbsp;<span class='${easy}'>Easy</span>&nbsp;&nbsp;<span class='${normal}'>Normal</span>&nbsp;&nbsp;<span class='${hard}'>Hard</span></div>`;
         d1.innerHTML += `<div class='listItem'>Disabled:&nbsp;<span class='${disabled}'>${raw.disabled?"True":"False"}</span></div>`;
+        
         // events
-        var btn2 = document.createElement('button');
-        btn2.innerHTML = 'Events:';
-        btn2.className = 'collapsible active';
+        var d2 = document.createElement('details');
+        var s2 = document.createElement('summary');
+        s2.innerHTML = `Events`;
+        d2.appendChild(s2);
+        d2.open = true;
 
-        var d2 = document.createElement('div');
-        d2.className = 'content';
         for(var i=0;i<raw.events.length;i++){
             var t = raw.events[i].type;
             var d = document.createElement('div');
@@ -270,11 +290,11 @@ function displayInfo(raw){
         }
 
         //actions
-        var btn3 = document.createElement('button');
-        btn3.innerHTML = 'Actions:';
-        btn3.className = 'collapsible active';
-        var d3 = document.createElement('div');
-        d3.className = 'content';
+        var d3 = document.createElement('details');
+        var s3 = document.createElement('summary');
+        s3.innerHTML = `Actions`;
+        d3.appendChild(s3);
+        d3.open = true;
         for(var i=0;i<raw.actions.length;i++){
             var t = raw.actions[i].type;
             var d = document.createElement('div');
@@ -290,13 +310,24 @@ function displayInfo(raw){
             d3.appendChild(d);
         }
         info.appendChild(d0);
-        info.appendChild(btn1);
         info.appendChild(d1);
-        info.appendChild(btn2);
         info.appendChild(d2);
-        info.appendChild(btn3);
         info.appendChild(d3);
-        bind_coll();
+        /*
+        var d4 = document.createElement('details');
+        var s4 = document.createElement('summary');
+        s4.className = 'collapsible';
+        s4.innerHTML = 'Neighbouring Nodes'
+        
+        d4.appendChild(s4);
+        for(var item of raw.neighbour){
+            var d = document.createElement('div');
+            d.className = 'listItem';
+            d.innerHTML = `neighbour: ${item}`;
+            d4.appendChild(d);
+        }
+        info.appendChild(d4);*/
+        
     }else{
         info.innerHTML = `
             Variable <br> 
@@ -315,8 +346,6 @@ function generateNetwork(raw) {
     const nodes_index = {};
     var L = document.getElementById('nodesList');
     L.innerHTML = '';
-    //var nodes = new vis.DataSet(raw.nodes);
-    //var edges = new vis.DataSet(raw.edges);
     nodesData = new vis.DataSet(nodes);
 
     const nodesFilter = (node) => {
@@ -507,7 +536,7 @@ function parseText(data){
         }
     }
 
-    // read trigger now
+    // read trigger
     for(var item in config.Triggers){
         const arr = config.Triggers[item].split(',');
         var obj = {};
@@ -567,7 +596,17 @@ function parseText(data){
 
     for(var item in config.VariableNames){
         var temp = config.VariableNames[item].split(',');
-        nodes.set('L'+item, {id:'L'+item,label:temp[0],initValue:temp[1],shape:"hexagon",mass:4,neighbour:new Set()});
+        nodes.set(
+            'L'+item, 
+            {
+                id: 'L'+item,
+                label: temp[0],
+                initValue: temp[1],
+                shape:"diamond", 
+                mass: 4,
+                neighbour: new Set()
+            }
+        );
     }
    // pre-processing: storing neighbour in nodes
     for(var i=0;i<edges.length;i++){
@@ -685,7 +724,20 @@ function parseText(data){
     // global variable helper function
     function addGV(num){
         if(!unique_id.has('G'+num)){
-            nodes.set('G'+num,{id:'G'+num,label:`Global Variable ${num}`,shape:"dot",mass:4,neighbour:new Set()});
+            nodes.set(
+                'G'+num,
+                {
+                    id: 'G'+num,
+                    label: `Global Variable ${num}`,
+                    shape: "triangle",
+                    mass: 4,
+                    neighbour: new Set(),
+                    color: {
+                        border: '#FF00FF',
+                        highlight: {border: '#FF00FF'}
+                    }
+                }
+            );
             unique_id.add('G'+num)
         }
     }

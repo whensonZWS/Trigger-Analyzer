@@ -62,7 +62,7 @@
             text-decoration: line-through;
             font-weight: bold;
         }
-        .collapsible{
+        summary{
             background-color: #777777;
             color: white;
             cursor: pointer;
@@ -70,16 +70,15 @@
             width: 100%;
             border: none;
             text-align: left;
-            outline: none;
             font-size: 15px;
+            user-select: none;
+            margin-top: 2px;
         }
-        .active, .collapsible:hover {
-            background-color: #777777;
+        summary:hover {
+            background-color: #555555;
         }
-        .content {
-            max-height: scroll-height +'px';
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
+        details[open] > summary {
+            background-color: #666666;
         }
         .main {
             width: 99vw;

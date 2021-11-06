@@ -251,9 +251,10 @@ function displayInfo(raw){
         d1.appendChild(s1);
         d1.open = true;
         const tags = raw.tags.join(',&nbsp')
+        repeatType = raw.repeat==0 ? 'one time OR' : raw.repeat==1 ? 'one time AND' : 'repeating OR' ;
         d1.innerHTML +=  `
             <div class='listItem'>House: ${raw.house}</div> 
-            <div class='listItem'>Repeat: ${raw.repeat}</div>
+            <div class='listItem'>Repeat: ${raw.repeat} (${repeatType})</div>
             <div class='listItem'>Tags: ${tags} </div>`
         if(raw.link.trim() != '<none>'){
             console.log(raw.link);

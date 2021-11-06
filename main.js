@@ -235,7 +235,10 @@ function displayInfo(raw){
     while(info.hasChildNodes()){
         info.removeChild(info.childNodes[0]);
     }
-    if(raw == null) return;
+    if(typeof(raw)=='string'){
+        info.innerHTML = raw;
+        return;
+    } 
     // Triggers:
     if(raw.house){
         // ID and Label
@@ -341,7 +344,12 @@ function displayInfo(raw){
 
 // receive nodes/edge object and generate network
 function generateNetwork(raw) {
-
+    var info = document.getElementById('info');
+    info.innerHTML = `
+    Parse complete, generating network graph. <br> 
+    <div class='yellow'> Warnings: </div>
+    <div> ${parseWarning(raw.warning)} </div>`;
+    var warningText = parseWarning(raw.warning);
     var nodes = raw.nodes;
     var edges = raw.edges;
     const nodes_index = {};
@@ -395,7 +403,7 @@ function generateNetwork(raw) {
             const n_id = params.nodes[0];
             displayInfo(nodesView.get(n_id));
         }else if(params.nodes.length == 0){
-            displayInfo(null)
+            displayInfo(warningText);
         }
     });
 
@@ -406,7 +414,7 @@ function generateNetwork(raw) {
     });
 
     // loading progress and info display
-    var info = document.getElementById('info')
+    
     network.on("stabilizationProgress", function (params) {
         info.innerText = "Loading: " + Math.round(params.iterations / params.total * 100) + '%\n';
         info.innerText += `Assets: \nTriggers & Variables: ${nodes.length} \nLinks: ${edges.length}`
@@ -525,7 +533,7 @@ function parseText(data){
         }
         triggerRef[item] = [];
     }
-
+    
     // update the triggers reference using the disjoint set
     for(var item in config.Tags){
         const arr = config.Tags[item].split(',');
@@ -617,10 +625,13 @@ function parseText(data){
         }catch{
             continue;
         }
-   }
-   nodes = Array.from(nodes.values());
-   result = {nodes, edges, warning};
-   return result;
+    }
+    nodes = Array.from(nodes.values());
+    if(config.Triggers == undefined){
+        warning.push(`There are no triggers in this map!`);
+    }
+    result = {nodes, edges, warning};
+    return result;
     
 
 
